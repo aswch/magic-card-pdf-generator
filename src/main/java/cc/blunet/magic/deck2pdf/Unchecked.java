@@ -1,4 +1,4 @@
-package cc.blunet.magic.proxycreator;
+package cc.blunet.magic.deck2pdf;
 
 public class Unchecked {
   public static void rethrow(final Throwable checkedException) {

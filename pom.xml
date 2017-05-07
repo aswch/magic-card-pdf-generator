@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cc.blunet</groupId>
-	<artifactId>blunet-magic</artifactId>
+	<artifactId>magic-deck2pdf</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
@@ -24,8 +24,8 @@
 		<maven.revision.plugin.version>1.4</maven.revision.plugin.version>
 		
 		<!-- Plugin Config -->
-		<java.source.version>1.7</java.source.version>
-		<java.target.version>1.7</java.target.version>
+		<java.source.version>1.8</java.source.version>
+		<java.target.version>1.8</java.target.version>
 		<file.encoding>UTF-8</file.encoding>
 		<project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>${file.encoding}</project.reporting.outputEncoding>
@@ -44,27 +44,34 @@
 			<artifactId>guava</artifactId>
 			<version>21.0</version>
 		</dependency>
+		<!-- java.lang.* on steroids -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.5</version>
+		</dependency>
 
-		<!-- core -->
+		<!-- ## core ## -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.16</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- @NonNull, ... -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
 			<version>3.0.2</version>
 		</dependency>
-		<!-- https://github.com/java-native-access/jna -->
+		<!-- proper access to native libraries -->
 		<dependency>
 				<groupId>net.java.dev.jna</groupId>
 				<artifactId>jna</artifactId>
 				<version>4.4.0</version>
 		</dependency>
 
-		<!-- Logging -->
+		<!-- ## Logging ## -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -76,7 +83,7 @@
 			<version>1.2.3</version>
 		</dependency>
 
-		<!-- Testing -->
+		<!-- ## Testing ## -->
 		<!-- TODO requires eclipse 4.7.1 (oxygen) -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -94,6 +101,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

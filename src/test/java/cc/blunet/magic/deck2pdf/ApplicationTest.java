@@ -15,11 +15,11 @@ public class ApplicationTest {
   public static void main(String[] args) throws URISyntaxException, IOException {
     Path root = Paths.get(ApplicationTest.class.getResource(".").toURI());
 
-    ImmutableList<Path> decks = ImmutableList.of(root.resolve("decklist.txt"));
+    Path deckPath = root;
     Optional<Path> collection = Optional.empty();
     Path imagesPath = root;
     Path resultPath = root;
 
-    new Application().run(decks, collection, imagesPath, resultPath);
+    new Application().run(deckPath, collection, imagesPath, resultPath);
   }
 }

@@ -32,13 +32,25 @@
 	</properties>
 	
 	<dependencies>
+		<!-- pdf -->
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>2.0.5</version>
 		</dependency>
+		<!-- compression -->
+		<dependency>
+			<groupId>net.sf.sevenzipjbinding</groupId>
+			<artifactId>sevenzipjbinding</artifactId>
+			<version>9.20-2.00beta</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.sevenzipjbinding</groupId>
+			<artifactId>sevenzipjbinding-all-platforms</artifactId>
+			<version>9.20-2.00beta</version>
+		</dependency>
 
-		<!-- base -->
+		<!-- ### BASE ### -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -51,7 +63,7 @@
 			<version>3.5</version>
 		</dependency>
 
-		<!-- ## core ## -->
+		<!-- ### CORE ### -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -71,7 +83,7 @@
 				<version>4.4.0</version>
 		</dependency>
 
-		<!-- ## Logging ## -->
+		<!-- ### LOGGING ### -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

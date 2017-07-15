@@ -1,6 +1,4 @@
-package cc.blunet.magic.deck2pdf;
-
-import static java.util.stream.Collectors.toList;
+package cc.blunet.common.io.compression;
 
 import java.io.Closeable;
 import java.io.File;
@@ -26,35 +24,16 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 
 public class SevenZipExtractor implements IArchiveExtractCallback, Closeable {
 
-  public static void main(String[] args) throws Exception {
-    Path source = Paths.get("/", "Users", "bernstein", "XLHQ-Sets-Torrent", "test");
-    Path target = source;
-
-    for (Path file : java.nio.file.Files//
-        .find(source, 1, (path, bfa) -> path.toFile().getName().endsWith(".zip"))//
-        .collect(toList())) {
-      extract(file, target);
-    }
-  }
-
-  public static void extract(Path file, Path extractPath) throws SevenZipException, IOException {
-    final String code = file.getFileName().toString().substring(0, 3);
-    UnaryOperator<Path> fileMapper = path -> {
-      if (path.endsWith("xlhq.jpg")) {
-        throw new RuntimeException("Wrong name: " + path);
-      }
-      String filePath = path.getFileName().toString().replace("xlhq.jpg", code + ".jpg");
-      return extractPath.resolve(filePath);
-    };
-
+  public static void extract(Path file, UnaryOperator<Path> fileMapper) throws IOException {
     try (//
         RandomAccessFile randomAccessFile = new RandomAccessFile(file.toFile(), "r");
         IInArchive inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile)); //
         SevenZipExtractor sze = new SevenZipExtractor(inArchive, fileMapper); //
     ) {
+      LOG.info("Extracting {}", file);
       inArchive.extract(null, false, sze);
     } catch (Exception ex) {
-      ex.printStackTrace();
+      LOG.error("Could not extract " + file + ".", ex);
     }
   }
 

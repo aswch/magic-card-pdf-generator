@@ -1,4 +1,4 @@
-package cc.blunet.magic.deck2pdf;
+package cc.blunet.common;
 
 public class Unchecked {
   public static void rethrow(final Throwable checkedException) {

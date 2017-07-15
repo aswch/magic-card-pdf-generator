@@ -1,4 +1,4 @@
-package cc.blunet.magic.deck2pdf;
+package cc.blunet.mtg.core;
 
 public enum MagicSetType {
   CORE, EXPANSION, REPRINT, DECK;

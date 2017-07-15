@@ -1,6 +1,5 @@
-package cc.blunet.magic.deck2pdf;
+package cc.blunet.mtg.tools;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
@@ -8,14 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -25,17 +19,15 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
-import com.google.common.io.Files;
 
 import cc.blunet.common.Unchecked;
+import cc.blunet.mtg.core.Deck;
+import cc.blunet.mtg.core.Deck.Card;
 
-public class Application {
+public class PdfCreatorApp {
 
   // create pdf for tokens/emblems: create a decklist!
 
@@ -50,48 +42,20 @@ public class Application {
     // where to write the resulting pdf
     Path resultPath = deckPath.getParent().resolve(deckPath.getFileName() + ".pdf");
 
-    new Application().run(deckPath, collection, imagesPath, resultPath);
+    new PdfCreatorApp().run(deckPath, collection, imagesPath, resultPath);
   }
 
   private static final Predicate<String> filter = n -> n.endsWith(".txt") && n.equals("Shared.txt");
 
   public void run(Path deckPath, Optional<Path> collectionPath, Path imagesPath, Path resultPath) throws IOException {
-    Deck collection = collectionPath.map(this::createDeck).orElse(Deck.empty());
+    Deck collection = collectionPath.map(Deck::createFrom).orElse(Deck.empty());
 
     Collection<Deck> decks = java.nio.file.Files //
         .find(deckPath, 99, (path, bfa) -> filter.test(path.toFile().getName())) //
-        .map(this::createDeck) //
+        .map(Deck::createFrom) //
         .collect(toList());
 
     createPdf(decks, collection, imagesPath, resultPath);
-  }
-
-  private static final Pattern cardLine = Pattern.compile("^\\s*(\\d+)x?\\s+(.+)$");
-
-  public Deck createDeck(Path path) {
-    String name = StringUtils.substring(path.toFile().getName(), 0, -4);
-    Multiset<Card> cards = readDeck(path).map(Card::new) //
-        .collect(ImmutableMultiset.toImmutableMultiset());
-    return new Deck(name, cards);
-  }
-
-  public Stream<String> readDeck(Path file) {
-    try {
-      List<String> lines = Files.readLines(file.toFile(), Charsets.UTF_8);
-      return lines.stream() //
-          .flatMap(line -> {
-            Matcher matcher = cardLine.matcher(line);
-            if (matcher.find()) {
-              int count = Integer.valueOf(matcher.group(1));
-              String card = matcher.group(2).trim();
-              return Collections.nCopies(count, card).stream();
-            }
-            return Stream.<String>empty();
-          });
-    } catch (IOException ex) {
-      Unchecked.rethrow(ex);
-      return null; // unreachable
-    }
   }
 
   private static final float POINTS_PER_MM = 2.834646F;
@@ -172,56 +136,5 @@ public class Application {
       }
     }
     return result;
-  }
-
-  public static final class Deck {
-    private static final Deck EMPTY = new Deck("empty", ImmutableMultiset.of());
-
-    private final String name;
-    private final Multiset<Card> cards;
-
-    public static Deck empty() {
-      return EMPTY;
-    }
-
-    public Deck(String name, Multiset<Card> cards) {
-      this.name = checkNotNull(name);
-      this.cards = ImmutableMultiset.copyOf(checkNotNull(cards));
-    }
-
-    public String name() {
-      return name;
-    }
-
-    public Multiset<Card> cards() {
-      return cards;
-    }
-  }
-
-  public static class Card {
-    private final String name;
-
-    public Card(String name) {
-      this.name = name;
-    }
-
-    public String name() {
-      return name;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (!(obj instanceof Card)) {
-        return false;
-      }
-      return equalTo((Card) obj);
-    }
-
-    public boolean equalTo(Card other) {
-      return name.equals(other);
-    }
   }
 }

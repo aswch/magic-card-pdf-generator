@@ -1,7 +1,7 @@
-package cc.blunet.magic.deck2pdf;
+package cc.blunet.mtg.tools;
 
-import static cc.blunet.magic.deck2pdf.MagicSetType.CORE;
-import static cc.blunet.magic.deck2pdf.MagicSetType.EXPANSION;
+import static cc.blunet.mtg.core.MagicSetType.CORE;
+import static cc.blunet.mtg.core.MagicSetType.EXPANSION;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.substring;
@@ -19,6 +19,8 @@ import com.google.common.collect.ImmutableSet;
 
 import cc.blunet.common.Unchecked;
 import cc.blunet.common.io.compression.SevenZipExtractor;
+import cc.blunet.mtg.core.MagicSet;
+import cc.blunet.mtg.core.MagicSetType;
 
 /**
  * Extracts Magic the Gathering Images from Set.zip files.

@@ -1,4 +1,4 @@
-package cc.blunet.magic.deck2pdf;
+package cc.blunet.mtg.core;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -11,11 +11,21 @@ import cc.blunet.common.BaseEntity;
 
 public final class MagicSet extends BaseEntity<String> {
 
+  public static MagicSet valueOf(String code) {
+    try {
+      return values().stream() //
+          .filter(s -> s.id().equals(code)) //
+          .findAny().get();
+    } catch (NullPointerException ex) {
+      throw new IllegalArgumentException(ex);
+    }
+  }
+
   public static Set<MagicSet> values() {
     return VALUES;
   }
 
-  private static final Set<MagicSet> VALUES = ImmutableSet.<MagicSet>of(//
+  private static final Set<MagicSet> VALUES = ImmutableSet.of(//
       // CORE
       core("LEA", "Limited Edition Alpha", date(1993, 8, 5)), //
       core("LEB", "Limited Edition Beta", date(1993, 10, 1)), //

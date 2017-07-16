@@ -7,7 +7,6 @@ import static cc.blunet.mtg.core.MagicSetType.EXPANSION;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static org.apache.commons.lang3.StringUtils.substring;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -18,8 +17,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableSet;
 
-import cc.blunet.common.Unchecked;
-import cc.blunet.common.io.compression.SevenZipExtractor;
+import cc.blunet.common.io.compression.ZipArchive;
 import cc.blunet.mtg.core.MagicSet;
 import cc.blunet.mtg.core.MagicSetType;
 
@@ -42,7 +40,7 @@ public class MagicSetExtractorApp {
     for (Path file : zips) {
       final String code = mtgSetCode(file);
 
-      SevenZipExtractor.extract(file, path -> {
+      ZipArchive.extract(file, path -> {
         String cardName = cardName(path);
 
         Matcher m = endsWithDigit.matcher(cardName);
@@ -69,7 +67,7 @@ public class MagicSetExtractorApp {
     if (fileName.endsWith(".xlhq.jpg")) {
       return substring(fileName, 0, -9);
     }
-    throw Unchecked.cast(new IOException("Unexpected fileName: " + path));
+    throw new IllegalStateException("Unexpected fileName: " + path);
   }
 
   private static String mtgSetCode(Path path) {

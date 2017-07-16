@@ -3,6 +3,7 @@ package cc.blunet.mtg.core;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
@@ -16,8 +17,8 @@ public final class MagicSet extends BaseEntity<String> {
       return values().stream() //
           .filter(s -> s.id().equals(code)) //
           .findAny().get();
-    } catch (NullPointerException ex) {
-      throw new IllegalArgumentException(ex);
+    } catch (NoSuchElementException ex) {
+      throw new IllegalArgumentException(code, ex);
     }
   }
 
@@ -245,6 +246,20 @@ public final class MagicSet extends BaseEntity<String> {
       other("ME4", "Masters Edition IV", date(2011, 1, 10)), // 12 80 72 105 0 0
       other("VMA", "Vintage Masters", date(2014, 6, 16)), // 0 101 80 105 30 9
       other("TPR", "Tempest Remastered", date(2015, 5, 6)), // 20 101 80 53 15 0
+      // FAKE CODES ?!?
+      // masterpiece series
+      other("EXP", "Zendikar Expeditions", date(2015, 10, 2)), //
+      other("MPS", "Masterpiece Series: Kaladesh Inventions", date(2016, 9, 30)), //
+      other("MPS_AKH", "Masterpiece Series: Amonkhet Invocations", date(2017, 4, 28)), //
+      // other
+      other("W16", "Welcome Deck 2016", date(2016, 4, 8)), //
+      other("W17", "Welcome Deck 2017", date(2017, 4, 15)), //
+      other("RQS", "Rivals Quick Start Set", date(1996, 6, 10)), //
+      other("MGB", "Multiverse Gift Box", date(1996, 11, 1)), //
+      other("ITP", "Introductory Two-Player Set", date(1996, 12, 31)), //
+      other("VAN", "Vanguard", date(1997, 5, 1)), //
+      other("CST", "Coldsnap Theme Decks", date(2006, 7, 21)), //
+      other("CPK", "Clash Pack", date(2014, 7, 18)) //
   );
 
   private static LocalDate date(int year, int month, int dayOfMonth) {

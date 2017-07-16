@@ -11,7 +11,7 @@ public class Unchecked {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends RuntimeException> T cast(final Throwable checkedException) {
+  public static <T extends Throwable> T cast(final Throwable checkedException) {
     return (T) checkedException;
   }
 }

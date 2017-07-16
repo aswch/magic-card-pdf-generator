@@ -19,10 +19,6 @@ public abstract class BaseEntity<T> implements Entity<T> {
     return id;
   }
 
-//  public boolean isEqualTo(ST other) {
-//    return Objects.equals(id, other.id());
-//  }
-
   @Override
   public final boolean equals(Object obj) {
     return this == obj //

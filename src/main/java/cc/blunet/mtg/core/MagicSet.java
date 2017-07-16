@@ -220,10 +220,32 @@ public final class MagicSet extends BaseEntity<String> {
       deck("CMA", "Commander Anthology", date(2017, 6, 9)), //
       deck("C17", "Commander 2017", date(2017, 8, 25)), //
       // Conspiracy
-      reprint("CNS", "Conspiracy", date(2014, 6, 6)), //
-      reprint("CN2", "Conspiracy: Take the Crown", date(2016, 8, 26)), //
+      deck("CNS", "Conspiracy", date(2014, 6, 6)), //
+      deck("CN2", "Conspiracy: Take the Crown", date(2016, 8, 26)), //
       // Other sets
-      deck("E02", "Explorers of Ixalan", date(2017, 11, 24)));
+      deck("E02", "Explorers of Ixalan", date(2017, 11, 24)), //
+
+      // OTHER
+      // Portal
+      other("POR", "Portal", date(1997, 6, 1)), // 20 90 57 55 0 0
+      other("PO2", "Portal Second Age", date(1998, 6, 1)), // 15 70 45 35 0 0
+      other("PTK", "Portal Three Kingdoms", date(1999, 5, 1)), // 15 55 55 55 0 0
+      // Starter
+      other("S99", "Starter 1999", date(1999, 7, 1)), // 20 63 55 35 0 0
+      other("S00", "Starter 2000", date(2000, 7, 1)), // 10 39 6 2 0 0
+      // Non-Legal
+      other("CED", "Collector's Edition", date(1993, 12, 1)), // 76 75 95 117 0 0
+      other("CEI", "International Collector's Edition", date(1993, 12, 1)), // 76 75 95 117 0 0
+      other("UGL", "Unglued", date(1998, 8, 17)), // 5 33 22 28 0, 0
+      other("UNH", "Unhinged", date(2004, 11, 20)), // 5 55 40 40 0 1
+      // Online-Only
+      other("MED", "Masters Edition", date(2007, 9, 10)), // 15 60 60 60 0 0
+      other("ME2", "Masters Edition II", date(2008, 9, 22)), // 5 80 80 80 0 0
+      other("ME3", "Masters Edition III", date(2009, 9, 7)), // 15 75 70 70 0 0
+      other("ME4", "Masters Edition IV", date(2011, 1, 10)), // 12 80 72 105 0 0
+      other("VMA", "Vintage Masters", date(2014, 6, 16)), // 0 101 80 105 30 9
+      other("TPR", "Tempest Remastered", date(2015, 5, 6)), // 20 101 80 53 15 0
+  );
 
   private static LocalDate date(int year, int month, int dayOfMonth) {
     return LocalDate.of(year, month, dayOfMonth);
@@ -243,6 +265,10 @@ public final class MagicSet extends BaseEntity<String> {
 
   private static MagicSet deck(String id, String name, LocalDate releasedOn) {
     return new MagicSet(MagicSetType.DECK, id, name, releasedOn);
+  }
+
+  private static MagicSet other(String id, String name, LocalDate releasedOn) {
+    return new MagicSet(MagicSetType.OTHER, id, name, releasedOn);
   }
 
   private final MagicSetType type;

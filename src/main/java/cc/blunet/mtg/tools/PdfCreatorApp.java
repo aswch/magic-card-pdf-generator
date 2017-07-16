@@ -26,6 +26,7 @@ import com.google.common.collect.Multimap;
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.Deck;
 import cc.blunet.mtg.core.Deck.Card;
+import cc.blunet.mtg.core.DeckFactory;
 
 public class PdfCreatorApp {
 
@@ -48,11 +49,11 @@ public class PdfCreatorApp {
   private static final Predicate<String> filter = n -> n.endsWith(".txt") && n.equals("Shared.txt");
 
   public void run(Path deckPath, Optional<Path> collectionPath, Path imagesPath, Path resultPath) throws IOException {
-    Deck collection = collectionPath.map(Deck::createFrom).orElse(Deck.empty());
+    Deck collection = collectionPath.map(DeckFactory::createFrom).orElse(Deck.empty());
 
     Collection<Deck> decks = java.nio.file.Files //
         .find(deckPath, 99, (path, bfa) -> filter.test(path.toFile().getName())) //
-        .map(Deck::createFrom) //
+        .map(DeckFactory::createFrom) //
         .collect(toList());
 
     createPdf(decks, collection, imagesPath, resultPath);

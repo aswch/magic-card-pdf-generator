@@ -1,9 +1,10 @@
 package cc.blunet.mtg.tools;
 
+import static cc.blunet.common.util.Paths2.fileName;
+import static cc.blunet.common.util.Paths2.stripFileSuffix;
 import static cc.blunet.mtg.core.MagicSetType.CORE;
 import static cc.blunet.mtg.core.MagicSetType.EXPANSION;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.substring;
 
 import java.io.IOException;
@@ -35,7 +36,8 @@ public class MagicSetExtractorApp {
     Path source = Paths.get("/", "Users", "bernstein", "XLHQ-Sets-Torrent");
     Path target = source.resolve("_all");
 
-    Set<Path> zips = java.nio.file.Files.find(source, 1, mtgSetFilter(CORE, EXPANSION)).collect(toSet());
+    Set<Path> zips = java.nio.file.Files.find(source, 1, mtgSetFileFilter(CORE, EXPANSION)) //
+        .collect(toImmutableSet());
 
     for (Path file : zips) {
       final String code = mtgSetCode(file);
@@ -53,7 +55,7 @@ public class MagicSetExtractorApp {
     }
   }
 
-  private static BiPredicate<Path, BasicFileAttributes> mtgSetFilter(MagicSetType... types) {
+  private static BiPredicate<Path, BasicFileAttributes> mtgSetFileFilter(MagicSetType... types) {
     Set<String> sets = MagicSet.values().stream()//
         .filter(s -> ImmutableSet.copyOf(types).contains(s.type())) //
         .map(MagicSet::id) //
@@ -72,13 +74,5 @@ public class MagicSetExtractorApp {
 
   private static String mtgSetCode(Path path) {
     return stripFileSuffix(fileName(path));
-  }
-
-  private static String fileName(Path file) {
-    return file.getFileName().toString();
-  }
-
-  private static String stripFileSuffix(String fileName) {
-    return substring(fileName, 0, -4);
   }
 }

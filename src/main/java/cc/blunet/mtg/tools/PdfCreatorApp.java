@@ -1,5 +1,6 @@
 package cc.blunet.mtg.tools;
 
+import static cc.blunet.common.util.Paths2.fileName;
 import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
@@ -25,56 +26,61 @@ import com.google.common.collect.Multimap;
 
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.Deck;
-import cc.blunet.mtg.core.Deck.Card;
 import cc.blunet.mtg.core.DeckFactory;
+import cc.blunet.mtg.core.PrintedDeck;
+import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
 
+/**
+ * Creates a Pdf with Magic the Gathering Card-Images from Deck files.
+ *
+ * @author claude.nobs@blunet.cc
+ */
 public class PdfCreatorApp {
 
-  // create pdf for tokens/emblems: create a decklist!
+  private static final Path root = Paths.get("/", "Users", "bernstein", "XLHQ-Sets-Torrent");
 
-  // TODO support these as commandline args
+  // TODO support commandline args?
+  // create pdf for tokens/emblems: create a decklist!
   public static void main(String[] args) throws IOException {
     // where to find a list of existing cards
-    Optional<Path> collection = Optional.empty();
+    Optional<Path> collectionPath = Optional.empty();
     // where to search for deck lists
-    Path deckPath = Paths.get("/", "Users", "bernstein", "XLHQ-Sets-Torrent", "C11");
+    Path deckPath = root.resolve("_decks");
     // where to read the images
-    Path imagesPath = deckPath; // Paths.get("C:", "Users", "ra8v", "Desktop");
+    Path imagesPath = root.resolve("_all");
     // where to write the resulting pdf
-    Path resultPath = deckPath.getParent().resolve(deckPath.getFileName() + ".pdf");
+    Path resultPath = deckPath.resolve("C15" + ".pdf");
+    Predicate<String> deckSelector = n -> n.startsWith("C15");
 
-    new PdfCreatorApp().run(deckPath, collection, imagesPath, resultPath);
-  }
+    // run
 
-  private static final Predicate<String> filter = n -> n.endsWith(".txt") && n.equals("Shared.txt");
+    PrintedDeck collection = collectionPath.map(DeckFactory::createFrom) //
+        .orElse(PrintedDeck.empty());
 
-  public void run(Path deckPath, Optional<Path> collectionPath, Path imagesPath, Path resultPath) throws IOException {
-    Deck collection = collectionPath.map(DeckFactory::createFrom).orElse(Deck.empty());
-
-    Collection<Deck> decks = java.nio.file.Files //
-        .find(deckPath, 99, (path, bfa) -> filter.test(path.toFile().getName())) //
+    Collection<PrintedDeck> decks = java.nio.file.Files //
+        .find(deckPath, 99, (path, bfa) -> fileName(path).endsWith(".txt") && deckSelector.test(fileName(path))) //
         .map(DeckFactory::createFrom) //
         .collect(toList());
 
-    createPdf(decks, collection, imagesPath, resultPath);
+    new PdfCreatorApp().createPdf(decks, collection, imagesPath, resultPath);
   }
 
   private static final float POINTS_PER_MM = 2.834646F;
 
-  private void createPdf(Collection<Deck> decks, Deck collection, Path imagesPath, Path resultPath) {
+  private void createPdf(Collection<PrintedDeck> decks, PrintedDeck collection, Path imagesPath, Path resultPath) {
     List<Float> x = ImmutableList.of(11.0f, 74.0f, 137.0f);
     List<Float> y = ImmutableList.of(16.0f, 104.0f, 192.0f).reverse();
 
     try (final PDDocument document = new PDDocument()) {
-      for (Multimap<Deck, Card> part : paged(decks, collection)) {
+      for (Multimap<Deck, PrintedCard> part : paged(decks, collection)) {
 
         final PDPage page = new PDPage(PDRectangle.A4);
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
           int i = 0;
-          for (Card card : part.values()) {
+          for (PrintedCard card : part.values()) {
             // add image to document (NOTE: images of same path are only added once)
-            String imagePath = imagesPath.resolve(normalize(card.name()) + ".xlhq.jpg").toString();
+            String imagePath = imagesPath.resolve(imageName(card)).toString();
             PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath, document);
             // place image in page
             contentStream.drawImage(pdImage, //
@@ -88,7 +94,7 @@ public class PdfCreatorApp {
           String text = part.keySet().stream() //
               .map(deck -> deck.name() + " (" + part.get(deck).size() + ")") //
               .reduce((a, b) -> a + " / " + b) //
-              .get();
+              .orElse("");
           drawText(contentStream, 11.0f * POINTS_PER_MM, 285.0f * POINTS_PER_MM, text);
         }
         document.addPage(page);
@@ -109,23 +115,25 @@ public class PdfCreatorApp {
     content.endText();
   }
 
-  private String normalize(String card) {
-    card = StringUtils.stripAccents(card //
+  private String imageName(PrintedCard card) {
+    String imageName = StringUtils.stripAccents(card.name() //
         .replace("\"", "") //
         .replace("//", "-"));
-    // hack for C11/C13/C14/15/16, might not work for other sets
-    return card.matches("Forest|Island|Mountain|Plains|Swamp") //
-        ? card + "1" //
-        : card;
+    imageName += "." + card.edition().id();
+    // FIXME hack for C11/C13/C14/15/16, might not work for other sets
+    if (card.name().matches("Forest|Island|Mountain|Plains|Swamp")) {
+      imageName += ".1";
+    }
+    return imageName + ".jpg";
   }
 
   // paged list of cards to be printed from given decks, minus those already in given collection
-  private List<Multimap<Deck, Card>> paged(Collection<Deck> decks, Deck collection) {
-    List<Multimap<Deck, Card>> result = new ArrayList<>();
-    Multimap<Deck, Card> page = null;
+  private List<Multimap<Deck, PrintedCard>> paged(Collection<PrintedDeck> decks, Deck collection) {
+    List<Multimap<Deck, PrintedCard>> result = new ArrayList<>();
+    Multimap<Deck, PrintedCard> page = null;
     int counter = 0;
-    for (Deck deck : decks) {
-      for (Card card : deck.cards()) {
+    for (PrintedDeck deck : decks) {
+      for (PrintedCard card : deck.printedCards()) {
         if (collection.cards().contains(card)) {
           continue;
         }

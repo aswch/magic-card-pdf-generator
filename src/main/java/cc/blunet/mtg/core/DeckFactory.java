@@ -1,57 +1,75 @@
 package cc.blunet.mtg.core;
 
-import static com.google.common.collect.ImmutableMultiset.toImmutableMultiset;
-import static com.google.common.collect.ImmutableSortedSet.toImmutableSortedSet;
 import static org.apache.commons.lang3.StringUtils.substring;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
-import com.google.common.collect.Ordering;
 import com.google.common.io.Files;
 
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.Deck.Card;
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
+import cc.blunet.mtg.db.Db;
 
-public class DeckFactory {
+public final class DeckFactory {
 
-  SortedSet<MagicSet> sets = MagicSet.values().stream() //
-      .filter(s -> s.type() == MagicSetType.DECK) //
-      .collect(toImmutableSortedSet(Ordering.natural().onResultOf(MagicSet::releasedOn)));
+  private DeckFactory() {}
 
-  public static Deck createFrom(Path path) {
+  private static final Logger LOG = LoggerFactory.getLogger(DeckFactory.class);
+
+  public static PrintedDeck createFrom(Path path) {
     String name = substring(path.getFileName().toString(), 0, -4);
-    Multiset<Card> cards = readDeck(path);
-    return new Deck(name, cards);
+    Multiset<PrintedCard> cards = readDeck(path);
+    return new PrintedDeck(name, cards);
   }
 
+  private static final Pattern deckLine = Pattern.compile("^.*\\[(\\w{3})\\].*$");
   private static final Pattern cardLine = Pattern.compile("^\\s*(\\d+)x?\\s+([^\\[]+)(\\s+\\[(\\w{3})\\]\\s*)?$");
 
-  private static Multiset<Card> readDeck(Path file) {
+  private static Multiset<PrintedCard> readDeck(Path file) {
     try {
-      List<String> lines = Files.readLines(file.toFile(), Charsets.UTF_8);
-      return lines.stream() //
-          .flatMap(line -> {
-            Matcher matcher = cardLine.matcher(line);
-            if (matcher.find()) {
-              int count = Integer.parseInt(matcher.group(1));
-              String name = matcher.group(2).trim();
-              MagicSet set = MagicSet.valueOf(matcher.group(4));
-              Card card = set == null ? new Card(name) : new PrintedCard(name, set);
-              return Collections.nCopies(count, card).stream();
-            }
-            return Stream.<Card>empty();
-          })//
-          .collect(toImmutableMultiset());
+      final AtomicReference<Optional<MagicSet>> defaultSet = new AtomicReference<>(Optional.empty());
+
+      // FIXME handle dual deck files...
+      ImmutableMultiset.Builder<PrintedCard> result = ImmutableMultiset.builder();
+      for (String line : Files.readLines(file.toFile(), Charsets.UTF_8)) {
+        Matcher matcher = cardLine.matcher(line);
+        if (matcher.find()) {
+          int count = Integer.parseInt(matcher.group(1));
+          String cardName = matcher.group(2).trim() //
+              .replace("Æ", "Ae"); // canonical English Db naming is "Ae"
+          Optional<Card> card = Db.readCard(cardName);
+          if (card.isPresent()) {
+            MagicSet set = Db.readSet(matcher.group(4)) //
+                .orElseGet(() -> defaultSet.get().orElseGet(() -> Db.sets(card.get()).first()));
+            PrintedCard pCard = new PrintedCard(card.get(), set);
+            result.addAll(Collections.nCopies(count, pCard));
+          } else {
+            // TODO skip headings: (Deck|COMMANDER|(Instant|Sorcery|Creature|Enchantment|Artifact|Land)\s+\(\d+\))
+            LOG.warn("Omitting unknown card: {}", cardName);
+          }
+        } else {
+          matcher = deckLine.matcher(line);
+          if (matcher.find()) {
+            defaultSet.set(Db.readSet(matcher.group(1)));
+          } else {
+            LOG.info("Omitting non-matching line: {}", line);
+          }
+        }
+      }
+      return result.build();
     } catch (IOException ex) {
       Unchecked.rethrow(ex);
       return null; // unreachable

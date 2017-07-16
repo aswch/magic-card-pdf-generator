@@ -32,7 +32,7 @@ public final class ZipArchive {
           Path filePath = Paths.get(entry.getName());
           File path = fileMapper.apply(filePath).toFile();
 
-          LOG.info("Extracting {} to {}", filePath, path);
+          LOG.debug("Extracting {} to {}", filePath, path);
 
           if (!path.getParentFile().exists()) {
             path.getParentFile().mkdirs();
@@ -43,7 +43,7 @@ public final class ZipArchive {
         }
         entry = zip.getNextEntry();
       }
-      LOG.info("Extraction successfully finished.");
+      LOG.debug("Extraction successfully finished.");
 
     } catch (IOException ex) {
       LOG.error("Could not extract " + file + ".", ex);

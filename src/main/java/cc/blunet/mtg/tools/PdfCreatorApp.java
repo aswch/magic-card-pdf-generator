@@ -56,12 +56,12 @@ public class PdfCreatorApp {
 
     // run
 
-    Optional<Deck> collection = collectionPath.map(DeckFactory::uncheckedCreateFrom) //
+    Optional<Deck> collection = collectionPath.map(DeckFactory::createFrom) //
         .map(Iterables::getOnlyElement);
 
     Collection<PrintedDeck> decks = Files //
         .find(deckPath, 99, (path, bfa) -> fileName(path).endsWith(".txt") && deckSelector.test(fileName(path))) //
-        .flatMap(p -> DeckFactory.uncheckedCreateFrom(p).stream()) //
+        .flatMap(p -> DeckFactory.createFrom(p).stream()) //
         .collect(toList());
 
     new PdfCreatorApp().createPdf(decks, collection, imagesPath, resultPath);

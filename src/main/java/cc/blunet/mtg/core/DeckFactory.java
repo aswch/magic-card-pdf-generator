@@ -63,6 +63,7 @@ public final class DeckFactory {
         } else {
           matcher = deckLine.matcher(line);
           if (matcher.find()) {
+            // TODO read deck name from this line...
             defaultSet.set(Db.readSet(matcher.group(1)));
           } else {
             LOG.info("Omitting non-matching line: {}", line);

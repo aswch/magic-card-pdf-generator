@@ -33,6 +33,7 @@ public class Deck extends BaseEntity<String> {
 
   // - types
 
+  // FIXME handle double-faced cards
   public static class Card extends BaseEntity<String> {
 
     public Card(String name) {

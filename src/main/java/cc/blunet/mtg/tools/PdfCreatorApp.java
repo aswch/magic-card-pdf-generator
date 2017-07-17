@@ -54,8 +54,7 @@ public class PdfCreatorApp {
 
     // run
 
-    PrintedDeck collection = collectionPath.map(DeckFactory::createFrom) //
-        .orElse(PrintedDeck.empty());
+    Optional<Deck> collection = collectionPath.map(DeckFactory::createFrom);
 
     Collection<PrintedDeck> decks = java.nio.file.Files //
         .find(deckPath, 99, (path, bfa) -> fileName(path).endsWith(".txt") && deckSelector.test(fileName(path))) //
@@ -67,7 +66,7 @@ public class PdfCreatorApp {
 
   private static final float POINTS_PER_MM = 2.834646F;
 
-  private void createPdf(Collection<PrintedDeck> decks, PrintedDeck collection, Path imagesPath, Path resultPath) {
+  public void createPdf(Collection<PrintedDeck> decks, Optional<Deck> collection, Path imagesPath, Path resultPath) {
     List<Float> x = ImmutableList.of(11.0f, 74.0f, 137.0f);
     List<Float> y = ImmutableList.of(16.0f, 104.0f, 192.0f).reverse();
 
@@ -80,8 +79,12 @@ public class PdfCreatorApp {
           int i = 0;
           for (PrintedCard card : part.values()) {
             // add image to document (NOTE: images of same path are only added once)
-            String imagePath = imagesPath.resolve(imageName(card)).toString();
-            PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath, document);
+            Path imagePath = imagesPath.resolve(imageName(card, ""));
+            if (!imagePath.toFile().exists()) {
+              // TODO allow selection of exact card when same card is multiple times in set
+              imagePath = imagesPath.resolve(imageName(card, ".1"));
+            }
+            PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath.toString(), document);
             // place image in page
             contentStream.drawImage(pdImage, //
                 x.get(i % 3) * POINTS_PER_MM, //
@@ -115,26 +118,21 @@ public class PdfCreatorApp {
     content.endText();
   }
 
-  private String imageName(PrintedCard card) {
+  private String imageName(PrintedCard card, String suffix) {
     String imageName = StringUtils.stripAccents(card.name() //
         .replace("\"", "") //
         .replace("//", "-"));
-    imageName += "." + card.edition().id();
-    // FIXME hack for C11/C13/C14/15/16, might not work for other sets
-    if (card.name().matches("Forest|Island|Mountain|Plains|Swamp")) {
-      imageName += ".1";
-    }
-    return imageName + ".jpg";
+    return imageName + "." + card.edition().id() + suffix + ".jpg";
   }
 
   // paged list of cards to be printed from given decks, minus those already in given collection
-  private List<Multimap<Deck, PrintedCard>> paged(Collection<PrintedDeck> decks, Deck collection) {
+  private List<Multimap<Deck, PrintedCard>> paged(Collection<PrintedDeck> decks, Optional<Deck> collection) {
     List<Multimap<Deck, PrintedCard>> result = new ArrayList<>();
     Multimap<Deck, PrintedCard> page = null;
     int counter = 0;
     for (PrintedDeck deck : decks) {
       for (PrintedCard card : deck.printedCards()) {
-        if (collection.cards().contains(card)) {
+        if (collection.isPresent() && collection.get().cards().contains(card)) {
           continue;
         }
         if (counter++ % 9 == 0) {

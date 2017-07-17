@@ -1,5 +1,5 @@
-Deck
- Heavenly Inferno [CMD] {WBR}
+Heavenly Inferno [CMD] {WBR}
+
 COMMANDER
  1 Kaalia of the Vast
 Creature (28)

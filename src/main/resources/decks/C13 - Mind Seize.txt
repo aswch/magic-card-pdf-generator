@@ -1,5 +1,5 @@
-Deck
- Mind Seize [C13] {UBR}
+Mind Seize [C13] {UBR}
+
 COMMANDER
  1 Jeleva, Nephalia's Scourge
 Creature (21)

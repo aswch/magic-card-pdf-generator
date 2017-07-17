@@ -1,5 +1,5 @@
-Deck
- Counterpunch [CMD] {BGW}
+Counterpunch [CMD] {BGW}
+
 COMMANDER
  1 Ghave, Guru of Spores
 Creature (26)

@@ -1,0 +1,89 @@
+Knights [DDG] {WG}
+
+Lands
+ 6 Forest
+ 12 Plains
+ 2 Grasslands
+ 1 Sejiri Steppe
+ 2 Selesnya Sanctuary
+ 1 Treetop Village
+Creatures
+ 1 Caravan Escort
+ 2 Lionheart Maverick
+ 2 Knight of Cliffhaven
+ 1 Knight of Meadowgrain
+ 1 Knight of the White Orchid
+ 1 Leonin Skyhunter
+ 1 Silver Knight
+ 1 White Knight
+ 1 Knotvine Paladin
+ 1 Steward of Valeron
+ 1 Benalish Lancer
+ 1 Zhalfirin Commander
+ 1 Knight Exemplar
+ 1 Knight of the Reliquary
+ 1 Wilt-Leaf Cavaliers
+ 1 Kabira Vindicator
+ 1 Kinsbaile Cavalier
+ 1 Alaborn Cavalier
+ 1 Skyhunter Patrol
+ 1 Plover Knights
+ 1 Juniper Order Ranger
+ 1 Paladin of Prahv
+Instants
+ 1 Harm's Way
+ 1 Reciprocate
+ 1 Mighty Leap
+ 1 Reprisal
+ 1 Test of Faith
+ 1 Heroes' Reunion
+ 1 Sigil Blessing
+Sorceries
+ 1 Edge of Autumn
+Enchantments
+ 1 Spidersilk Armor
+ 1 Griffin Guide
+ 1 Oblivion Ring
+Artifacts
+ 1 Loxodon Warhammer
+----------------------------------------------
+Dragons [DDG] {R}
+
+Lands
+ 24 Mountain
+Creatures
+ 1 Cinder Wall
+ 1 Skirk Prospector
+ 1 Bloodmark Mentor
+ 1 Fire-Belly Changeling
+ 2 Mudbutton Torchrunner
+ 1 Dragonspeaker Shaman
+ 2 Dragon Whelp
+ 1 Henge Guardian
+ 1 Voracious Dragon
+ 1 Bogardan Rager
+ 1 Mordant Dragon
+ 1 Kilnmouth Dragon
+ 1 Shivan Hellkite
+ 1 Thunder Dragon
+ 1 Bogardan Hellkite
+Instants
+ 1 Punishing Fire
+ 1 Ghostfire
+ 1 Seething Song
+ 1 Seismic Strike
+ 1 Temporary Insanity
+ 2 Fiery Fall
+Sorceries
+ 1 Breath of Darigaaz
+ 2 Dragon Fodder
+ 1 Spitting Earth
+ 1 Cone of Flame
+ 1 Jaws of Stone
+Enchantments
+ 1 Captive Flame
+ 1 Claws of Valakut
+ 1 Shiv's Embrace
+Artifacts
+ 2 Armillary Sphere
+ 1 Dragon's Claw

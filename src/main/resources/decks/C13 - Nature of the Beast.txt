@@ -1,5 +1,5 @@
-Deck
- Nature of the Beast [C13] {RGW}
+Nature of the Beast [C13] {RGW}
+
 COMMANDER
  1 Marath, Will of the Wild
 Creature (22)

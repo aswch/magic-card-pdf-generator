@@ -1,5 +1,5 @@
-Deck
- Power Hungry [C13] {BRG}
+Power Hungry [C13] {BRG}
+
 COMMANDER
  1 Prossh, Skyraider of Kher
 Creature (30)

@@ -1,5 +1,5 @@
-Deck
- Swell the Host [C15] {GU}
+Swell the Host [C15] {GU}
+
 COMMANDER 
  1 Ezuri, Claw of Progress
 Creature (33)

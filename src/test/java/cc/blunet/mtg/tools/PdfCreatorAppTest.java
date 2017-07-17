@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ public class PdfCreatorAppTest {
   public static void main(String[] args) throws URISyntaxException, IOException {
     // given
     Path root = Paths.get(PdfCreatorAppTest.class.getResource(".").toURI());
-    Collection<PrintedDeck> decks = Arrays.asList(DeckFactory.createFrom(root.resolve("decklist.txt")));
+    Collection<PrintedDeck> decks = DeckFactory.createFrom(root.resolve("decklist.txt"));
     Optional<Deck> collection = Optional.empty();
     Path imagesPath = root;
     Path resultPath = root;

@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -173,6 +174,6 @@ public final class Db {
       zip.getNextEntry();
       return new InputStreamReader(zip, StandardCharsets.UTF_8);
     }
-    return java.nio.file.Files.newBufferedReader(file, StandardCharsets.UTF_8);
+    return Files.newBufferedReader(file, StandardCharsets.UTF_8);
   }
 }

@@ -1,5 +1,5 @@
-Deck
- Mirror Mastery [CMD] {URG}
+Mirror Mastery [CMD] {URG}
+
 COMMANDER
  1 Riku of Two Reflections
 Planeswalker (1)

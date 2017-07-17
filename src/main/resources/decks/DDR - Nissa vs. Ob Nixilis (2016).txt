@@ -1,0 +1,79 @@
+Nissa [DDR] {G}
+
+Planeswalker
+ 1 Nissa, Voice of Zendikar
+Creature
+ 2 Scythe Leopard
+ 2 Elvish Visionary
+ 1 Oran-Rief Invoker
+ 2 Thornweald Archer
+ 1 Nissa's Chosen
+ 2 Citanul Woodreaders
+ 2 Civic Wayfinder
+ 1 Fertilid
+ 2 Gilt-Leaf Seer
+ 1 Wood Elves
+ 2 Briarhorn
+ 1 Saddleback Lagac
+ 2 Jaddi Lifestrider
+ 1 Thicket Elemental
+ 2 Woodborn Behemoth
+ 1 Oran-Rief Hydra
+ 1 Cloudthresher
+ 1 Oakgnarl Warrior
+ 1 Walker of the Grove
+Sorcery
+ 1 Gaea's Blessing
+ 1 Seek the Horizon
+Instant
+ 1 Crop Rotation
+ 2 Vines of the Recluse
+ 1 Natural Connection
+Enchantment
+ 1 Abundance
+Land
+ 2 Fertile Thicket
+ 2 Khalni Garden
+ 1 Mosswort Bridge
+ 1 Treetop Village
+ 18 Forest
+---------------------------------
+Ob Nixilis [DDR] {B}
+
+Planeswalker
+ 1 Ob Nixilis Reignited
+Creature
+ 2 Carrier Thrall
+ 2 Fetid Imp
+ 1 Despoiler of Souls
+ 1 Foul Imp
+ 2 Blistergrub
+ 1 Giant Scorpion
+ 1 Cadaver Imp
+ 1 Bala Ged Scorpion
+ 1 Desecration Demon
+ 1 Squelching Leeches
+ 1 Indulgent Tormentor
+ 1 Priest of the Blood Rite
+ 1 Renegade Demon
+ 1 Pestilence Demon
+Sorcery
+ 1 Innocent Blood
+ 1 Mire's Toll
+ 2 Grim Discovery
+ 2 Smallpox
+ 1 Ambition's Cost
+ 1 Demon's Grasp
+Instant
+ 1 Disfigure
+ 1 Altar's Reap
+ 2 Doom Blade
+ 1 Hideous End
+ 1 Tendrils of Corruption
+Enchantment
+ 2 Quest for the Gravelord
+ 1 Shadows of the Past
+ 1 Unhallowed Pact
+Land
+ 2 Leechridden Swamp
+ 22 Swamp

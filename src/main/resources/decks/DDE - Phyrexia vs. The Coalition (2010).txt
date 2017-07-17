@@ -1,0 +1,85 @@
+Phyrexia [DDE] {B}
+
+Lands
+ 25 Swamp
+Creatures
+ 1 Bone Shredder
+ 1 Carrion Feeder
+ 1 Order of Yawgmoth
+ 1 Phyrexian Battleflies
+ 1 Phyrexian Broodlings
+ 1 Phyrexian Colossus
+ 1 Phyrexian Debaser
+ 1 Phyrexian Defiler
+ 1 Phyrexian Denouncer
+ 1 Phyrexian Gargantua
+ 1 Phyrexian Ghoul
+ 1 Phyrexian Hulk
+ 1 Phyrexian Negator
+ 1 Phyrexian Plaguelord
+ 2 Priest of Gix
+ 1 Sanguine Guard
+Instants
+ 2 Dark Ritual
+ 1 Hideous End
+ 1 Slay
+ 2 Tendrils of Corruption
+Sorceries
+ 1 Living Death
+Enchantments
+ 1 Phyrexian Arena
+Artifacts
+ 1 Hornet Cannon
+ 1 Lightning Greaves
+ 1 Phyrexian Processor
+ 1 Phyrexian Totem
+ 1 Phyrexian Vault
+ 2 Puppet Strings
+ 1 Voltaic Key
+ 1 Whispersilk Cloak
+ 1 Worn Powerstone
+--------------------------
+The Coalition [DDE] {WUBRG}
+
+Lands
+ 10 Forest
+ 1 Island
+ 4 Mountain
+ 4 Plains
+ 1 Swamp
+ 1 Elfhame Palace
+ 1 Shivan Oasis
+ 3 Terramorphic Expanse
+Creatures
+ 1 Charging Troll
+ 1 Darigaaz, the Igniter
+ 1 Gerrard Capashen
+ 2 Nomadic Elf
+ 1 Quirion Elves
+ 1 Rith, the Awakener
+ 1 Sunscape Battlemage
+ 2 Thornscape Apprentice
+ 2 Thornscape Battlemage
+ 1 Thunderscape Battlemage
+ 1 Treva, the Renewer
+ 1 Verduran Emissary
+ 2 Yavimaya Elder
+Instants
+ 1 Darigaaz's Charm
+ 1 Evasive Action
+ 1 Gerrard's Command
+ 2 Harrow
+ 1 Narrow Escape
+ 1 Rith's Charm
+ 1 Treva's Charm
+ 1 Urza's Rage
+Sorceries
+ 1 Allied Strategies
+ 1 Tribal Flames
+Enchantments
+ 2 Armadillo Cloak
+ 1 Exotic Curse
+ 2 Fertile Ground
+Artifacts
+ 1 Coalition Relic
+ 1 Power Armor

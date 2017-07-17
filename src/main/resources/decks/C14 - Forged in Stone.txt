@@ -1,5 +1,5 @@
-Deck
- Forged in Stone [C14] {W}
+Forged in Stone [C14] {W}
+
 COMMANDER
  1 Nahiri, the Lithomancer
 Creature (21)

@@ -1,0 +1,95 @@
+Izzet [DDJ] {UR}
+
+Lands
+  10 Island
+  9 Mountain
+  1 Forgotten Cave
+  2 Izzet Boilerworks
+  1 Lonely Sandbar
+  1 Nivix, Aerie of the Firemind
+Creatures
+  1 Djinn Illuminatus
+  1 Galvanoth
+  1 Gelectrode
+  1 Goblin Electromancer
+  1 Izzet Chronarch
+  1 Izzet Guildmage
+  2 Kiln Fiend
+  1 Niv-Mizzet, the Firemind
+  1 Ogre Savant
+  2 Shrewd Hatchling
+  1 Steamcore Weird
+  2 Wee Dragonauts
+Instants
+  1 Brainstorm
+  1 Call to Heel
+  1 Dissipate
+  1 Fire // Ice
+  1 Force Spike
+  1 Izzet Charm
+  1 Magma Spray
+  1 Overwhelming Intellect
+  1 Prophetic Bolt
+  2 Pyromatics
+  1 Street Spasm
+  1 Thunderheads
+Sorceries
+  1 Invoke the Firemind
+  1 Reminisce
+  1 Train of Thought
+  1 Vacuumelt
+Enchantments
+  1 Quicksilver Dagger
+Artifacts
+  1 Isochron Scepter
+  1 Izzet Signet
+  1 Sphinx-Bone Wand
+-------------------------------------
+Golgari [DDJ] {BG}
+
+Lands
+  8 Forest
+  10 Swamp
+  1 Barren Moor
+  1 Dakmor Salvage
+  2 Golgari Rot Farm
+  1 Svogthos, the Restless Tomb
+  1 Tranquil Thicket
+Creatures
+  1 Boneyard Wurm
+  1 Brain Weevil
+  1 Doomgape
+  1 Dreg Mangler
+  2 Elves of Deep Shadow
+  1 Eternal Witness
+  1 Gleancrawler
+  1 Golgari Grave-Troll
+  2 Golgari Rotwurm
+  1 Golgari Thug
+  1 Greater Mossdog
+  1 Jarad, Golgari Lich Lord
+  1 Korozda Guildmage
+  1 Plagued Rusalka
+  1 Putrid Leech
+  1 Ravenous Rats
+  1 Reassembling Skeleton
+  1 Sadistic Hypnotist
+  1 Shambling Shell
+  1 Stingerfling Spider
+  1 Stinkweed Imp
+Instants
+  1 Feast or Famine
+  1 Ghoul's Feast
+  2 Putrefy
+Sorceries
+  1 Grim Flowering
+  1 Life // Death
+  1 Life from the Loam
+  1 Nightmare Void
+  1 Twilight's Call
+  1 Vigor Mortis
+Enchantments
+  1 Golgari Germination
+  1 Yoke of the Damned
+Artifacts
+  1 Golgari Signet

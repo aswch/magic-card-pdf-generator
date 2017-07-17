@@ -4,6 +4,7 @@ import static cc.blunet.common.util.Paths2.fileName;
 import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -54,11 +56,12 @@ public class PdfCreatorApp {
 
     // run
 
-    Optional<Deck> collection = collectionPath.map(DeckFactory::createFrom);
+    Optional<Deck> collection = collectionPath.map(DeckFactory::uncheckedCreateFrom) //
+        .map(Iterables::getOnlyElement);
 
-    Collection<PrintedDeck> decks = java.nio.file.Files //
+    Collection<PrintedDeck> decks = Files //
         .find(deckPath, 99, (path, bfa) -> fileName(path).endsWith(".txt") && deckSelector.test(fileName(path))) //
-        .map(DeckFactory::createFrom) //
+        .flatMap(p -> DeckFactory.uncheckedCreateFrom(p).stream()) //
         .collect(toList());
 
     new PdfCreatorApp().createPdf(decks, collection, imagesPath, resultPath);

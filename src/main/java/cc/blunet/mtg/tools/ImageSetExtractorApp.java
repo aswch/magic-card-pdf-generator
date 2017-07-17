@@ -3,10 +3,12 @@ package cc.blunet.mtg.tools;
 import static cc.blunet.common.util.Paths2.fileName;
 import static cc.blunet.common.util.Paths2.stripFileSuffix;
 import static cc.blunet.mtg.core.MagicSetType.CORE;
+import static cc.blunet.mtg.core.MagicSetType.DECK;
 import static cc.blunet.mtg.core.MagicSetType.EXPANSION;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 import static org.apache.commons.lang3.StringUtils.substring;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -35,7 +37,7 @@ public class ImageSetExtractorApp {
     Path source = Paths.get("/", "Users", "bernstein", "XLHQ-Sets-Torrent");
     Path target = source.resolve("_all");
 
-    Set<Path> zips = java.nio.file.Files.find(source, 1, mtgSetFileFilter(CORE, EXPANSION)) //
+    Set<Path> zips = Files.find(source, 1, mtgSetFileFilter(CORE, EXPANSION, DECK)) //
         .collect(toImmutableSet());
 
     for (Path file : zips) {
@@ -48,10 +50,10 @@ public class ImageSetExtractorApp {
               .replace("Æ", "Ae") //
               .replace("AE", "Ae");
 
-        Matcher m = endsWithDigit.matcher(cardName);
+          Matcher m = endsWithDigit.matcher(cardName);
           fileName = m.matches() //
-            ? m.replaceFirst("$1." + code + ".$2.jpg") //
-            : cardName + "." + code + ".jpg";
+              ? m.replaceFirst("$1." + code + ".$2.jpg") //
+              : cardName + "." + code + ".jpg";
         }
         return target.resolve(fileName);
       });

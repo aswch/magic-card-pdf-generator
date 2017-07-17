@@ -1,5 +1,5 @@
-Deck
- Eternal Bargain [C13] {WUB}
+Eternal Bargain [C13] {WUB}
+
 COMMANDER
  1 Oloro, Ageless Ascetic
 Creature (27)

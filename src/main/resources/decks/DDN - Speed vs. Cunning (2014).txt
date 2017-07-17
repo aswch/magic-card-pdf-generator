@@ -1,0 +1,84 @@
+Speed [DDN] {WBR}
+
+Lands
+ 2 Evolving Wilds
+ 1 Ghitu Encampment
+ 10 Mountain
+ 2 Nomad Outpost
+ 3 Plains
+ 6 Swamp
+Creatures
+ 2 Beetleback Chief
+ 2 Dregscape Zombie
+ 1 Flame-Kin Zealot
+ 1 Fleshbag Marauder
+ 1 Frenzied Goblin
+ 1 Goblin Deathraiders
+ 1 Goblin Warchief
+ 1 Hellraiser Goblin
+ 1 Hell's Thunder
+ 1 Infantry Veteran
+ 1 Kathari Bomber
+ 1 Krenko, Mob Boss
+ 2 Leonin Snarecaster
+ 1 Mardu Heart-Piercer
+ 1 Ogre Battledriver
+ 1 Oni of Wild Places
+ 1 Scourge Devil
+ 1 Shambling Remains
+ 1 Zurgo Helmsmasher
+Spells
+ 1 Act of Treason
+ 1 Arc Trail
+ 1 Banefire
+ 1 Bone Splinters
+ 1 Dauntless Onslaught
+ 2 Fiery Fall
+ 1 Fury of the Horde
+ 1 Goblin Bombardment
+ 2 Krenko's Command
+ 1 Orcish Cannonade
+ 1 Reckless Abandon
+ 1 Shock
+------------------------------
+Cunning [DDN] {WR}
+
+Lands
+ 10 Island
+ 3 Mountain
+ 2 Mystic Monastery
+ 7 Plains
+ 2 Terramorphic Expanse
+Creatures
+ 2 Aquamorph Entity
+ 1 Arcanis the Omnipotent
+ 2 Coral Trickster
+ 1 Echo Tracer
+ 2 Faerie Impostor
+ 1 Faerie Invaders
+ 2 Fathom Seer
+ 1 Hussar Patrol
+ 1 Jeskai Elder
+ 1 Kor Hookmaster
+ 1 Lightning Angel
+ 1 Lone Missionary
+ 1 Master Decoy
+ 1 Sparkmage Apprentice
+ 1 Sphinx of Uthuun
+ 1 Stonecloaker
+ 1 Thousand Winds
+ 1 Willbender
+Spells
+ 1 Arrow Volley Trap
+ 1 Fleeting Distraction
+ 1 Hold the Line
+ 1 Impulse
+ 1 Inferno Trap
+ 1 Lightning Helix
+ 1 Mana Leak
+ 1 Repeal
+ 1 Stave Off
+ 1 Steam Augury
+ 1 Swift Justice
+ 2 Traumatic Visions
+ 1 Whiplash Trap

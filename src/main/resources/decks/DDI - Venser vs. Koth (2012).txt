@@ -1,0 +1,87 @@
+Venser: Evade and Shimmer [DDI] {WU}
+
+Lands
+ 11 Island
+ 7 Plains
+ 1 Azorius Chancery
+ 1 Flood Plain
+ 1 New Benalia
+ 2 Sejiri Refuge
+ 1 Soaring Seacliff
+Creatures
+ 1 Whitemane Lion
+ 1 Augury Owl
+ 1 Coral Fighters
+ 1 Minamo Sightbender
+ 1 Mistmeadow Witch
+ 2 Scroll Thief
+ 1 Neurok Invisimancer
+ 2 Slith Strider
+ 1 Sky Spirit
+ 1 Wall of Denial
+ 1 Galepowder Mage
+ 1 Kor Cartographer
+ 1 Clone
+ 1 Cryptic Annelid
+ 1 Primal Plasma
+ 1 Sawtooth Loon
+ 1 Cache Raiders
+ 1 Windreaver
+ 1 Jedit's Dragoons
+ 1 Sunblast Angel
+ 1 Sphinx of Uthuun
+Instants
+ 1 Path to Exile
+ 1 Safe Passage
+ 1 Vanish into Memory
+ 2 Overrule
+Sorceries
+ 2 Preordain
+ 1 Revoke Existence
+Enchantments
+ 1 Sigil of Sleep
+ 1 Angelic Shield
+ 1 Oblivion Ring
+ 1 Steel of the Godhead
+Planeswalkers
+ 1 Venser, the Sojourner
+-----------------------------------
+Koth: Erupt and Overwhelm [DDI] {R}
+
+Lands
+ 25 Mountain
+Creatures
+ 2 Plated Geopede
+ 1 Pygmy Pyrosaur
+ 2 Pilgrim's Eye
+ 1 Æther Membrane
+ 2 Fiery Hellhound
+ 1 Vulshok Sorcerer
+ 1 Anger
+ 1 Cosi's Ravager
+ 1 Vulshok Berserker
+ 1 Bloodfire Kavu
+ 1 Stone Giant
+ 1 Geyser Glider
+ 1 Lithophage
+ 1 Torchling
+ 1 Chartooth Cougar
+ 1 Earth Servant
+ 1 Greater Stone Spirit
+ 1 Bloodfire Colossus
+Instants
+ 1 Downhill Charge
+ 1 Searing Blaze
+ 2 Seismic Strike
+Sorceries
+ 1 Jaws of Stone
+ 1 Spire Barrage
+ 1 Volley of Boulders
+Artifacts
+ 1 Armillary Sphere
+ 1 Journeyer's Kite
+ 1 Vulshok Battlegear
+ 1 Vulshok Morningstar
+ 2 Wayfarer's Bauble
+Planeswalkers
+ 1 Koth of the Hammer

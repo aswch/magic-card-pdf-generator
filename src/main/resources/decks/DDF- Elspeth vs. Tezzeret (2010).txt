@@ -1,0 +1,90 @@
+Elspeth [DDF] {W}
+
+Lands
+ 22 Plains
+ 1 Daru Encampment
+ 1 Kabira Crossroads
+ 1 Rustic Clachan
+Creatures
+ 1 Angel of Salvation
+ 1 Burrenton Bombardier
+ 1 Catapult Master
+ 1 Celestial Crusader
+ 1 Conclave Equenaut
+ 1 Conclave Phalanx
+ 2 Elite Vanguard
+ 1 Glory Seeker
+ 1 Goldmeadow Harrier
+ 1 Infantry Veteran
+ 1 Kemba's Skyguard
+ 1 Kor Aeronaut
+ 1 Kor Hookmaster
+ 2 Kor Skyfisher
+ 1 Loyal Sentry
+ 1 Mosquito Guard
+ 1 Seasoned Marshal
+ 1 Stormfront Riders
+ 1 Temple Acolyte
+Instants
+ 1 Abolish
+ 1 Blinding Beam
+ 1 Mighty Leap
+ 2 Raise the Alarm
+ 1 Razor Barrier
+ 1 Swell of Courage
+ 2 Swords to Plowshares
+Sorceries
+ 1 Saltblast
+ 1 Sunlance
+Enchantments
+ 1 Crusade
+ 1 Journey to Nowhere
+Planeswalkers
+ 1 Elspeth, Knight-Errant
+-----------------------------------------
+Tezzeret [DDF] {U}
+
+Lands
+ 20 Island
+ 1 Darksteel Citadel
+ 1 Mishra's Factory
+ 1 Seat of the Synod
+ 1 Stalking Stones
+Creatures
+ 1 Arcbound Worker
+ 1 Assembly-Worker
+ 1 Clockwork Condor
+ 1 Clockwork Hydra
+ 1 Esperzoa
+ 1 Faerie Mechanist
+ 1 Frogmite
+ 1 Juggernaut
+ 1 Master of Etherium
+ 1 Pentavus
+ 1 Qumulox
+ 1 Razormane Masticore
+ 2 Runed Servitor
+ 1 Serrated Biskelion
+ 1 Silver Myr
+ 1 Steel Overseer
+ 1 Steel Wall
+ 1 Synod Centurion
+ 1 Trinket Mage
+ 1 Triskelion
+Instants
+ 1 Echoing Truth
+ 1 Foil
+ 2 Thirst for Knowledge
+Sorceries
+ 1 Argivian Restoration
+ 1 Thoughtcast
+Artifacts
+ 1 Æther Spellbomb
+ 1 Contagion Clasp
+ 1 Elixir of Immortality
+ 1 Energy Chamber
+ 2 Everflowing Chalice
+ 1 Moonglove Extract
+ 1 Trip Noose
+Planeswalkers
+ 1 Tezzeret the Seeker

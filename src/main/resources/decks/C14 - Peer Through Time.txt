@@ -1,5 +1,5 @@
-Deck
- Peer Through Time [C14] {U}
+Peer Through Time [C14] {U}
+
 COMMANDER
  1 Teferi, Temporal Archmage
 Creature (25)

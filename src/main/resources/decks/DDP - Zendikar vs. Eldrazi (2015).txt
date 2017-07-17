@@ -1,0 +1,84 @@
+Zendikar [DDP] {WG}
+
+Lands (26)
+ 1 Stirring Wildwood
+ 2 Evolving Wilds
+ 2 Graypelt Refuge
+ 2 Turntimber Grove
+ 9 Plains
+ 10 Forest
+Creatures (23)
+ 1 Affa Guard Hound
+ 1 Avenger of Zendikar
+ 1 Beastbreaker of Bala Ged
+ 1 Daggerback Basilisk
+ 1 Frontier Guide
+ 1 Grazing Gladehart
+ 1 Joraga Bard
+ 1 Kabira Vindicator
+ 1 Knight of Cliffhaven
+ 1 Makindi Griffin
+ 1 Ondu Giant
+ 1 Scute Mob
+ 1 Stonework Puma
+ 1 Tajuru Archer
+ 1 Turntimber Basilisk
+ 1 Veteran Warleader
+ 1 Wildheart Invoker
+ 2 Caravan Escort
+ 2 Graypelt Hunter
+ 2 Territorial Baloth
+Artifacts (2)
+ 1 Explorer's Scope
+ 1 Seer's Sundial
+Enchantments (2)
+ 1 Khalni Heart Expedition
+ 1 Retreat to Kazandu
+Instants (3)
+ 1 Groundswell
+ 1 Harrow
+ 1 Repel the Darkness
+Sorceries (4)
+ 1 Oust
+ 1 Primal Command
+ 2 Sheer Drop
+Zendikar vs. Eldrazi.png
+-------------------------------------
+Eldrazi [DDP] {BR}
+
+Lands (26)
+ 1 Eldrazi Temple
+ 2 Rocky Tar Pit
+ 3 Akoum Refuge
+ 7 Mountain
+ 13 Swamp
+Creatures (22)
+ 1 Artisan of Kozilek
+ 1 Bloodrite Invoker
+ 1 Bloodthrone Vampire
+ 1 Butcher of Malakir
+ 1 Cadaver Imp
+ 1 Forerunner of Slaughter
+ 1 It That Betrays
+ 1 Magmaw
+ 1 Oblivion Sower
+ 1 Pawn of Ulamog
+ 1 Torch Slinger
+ 1 Ulamog's Crusher
+ 1 Vampire Nighthawk
+ 2 Dominator Drone
+ 2 Heartstabber Mosquito
+ 2 Runed Servitor
+ 3 Emrakul's Hatcher
+Artifacts (2)
+ 2 Mind Stone
+Instants (3)
+ 1 Consume the Meek
+ 1 Induce Despair
+ 1 Smother
+Sorceries (7)
+ 1 Corpsehatch
+ 1 Hellion Eruption
+ 1 Marsh Casualties
+ 2 Forked Bolt
+ 2 Read the Bones

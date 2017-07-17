@@ -1,0 +1,71 @@
+Elspeth [DDO] {W}
+
+Planeswalker
+ 1 Elspeth, Sun's Champion
+Lands
+ 2 Secluded Steppe
+ 22 Plains
+Creatures
+ 2 Icatian Javelineers
+ 1 Mother of Runes
+ 2 Kinsbaile Skirmisher
+ 1 Kor Skyfisher
+ 1 Precinct Captain
+ 2 Veteran Armorsmith
+ 1 Court Street Denizen
+ 1 Standing Troops
+ 2 Veteran Swordsmith
+ 1 Banisher Priest
+ 2 Gustcloak Harrier
+ 1 Gustcloak Skirmisher
+ 1 Gustcloak Sentinel
+ 1 Gustcloak Savior
+ 2 Loxodon Partisan
+ 1 Gempalm Avenger
+ 1 Noble Templar
+ 1 Captain of the Watch
+Spells
+ 1 Mortal's Ardor
+ 2 Sunlance
+ 1 Mighty Leap
+ 2 Raise the Alarm
+ 1 Soul Parry
+ 1 Celestial Flare
+ 1 Dauntless Onslaught
+ 1 Dictate of Heliod
+ 1 Decree of Justice
+---------------------------
+Kiora [DDO] {UG}
+
+Planeswalker
+ 1 Kiora, the Crashing Wave
+Lands
+ 2 Evolving Wilds
+ 1 Temple of the False God
+ 11 Forest
+ 11 Island
+Creatures
+ 1 Omenspeaker
+ 2 Coiling Oracle
+ 1 Kiora's Follower
+ 2 Grazing Gladehart
+ 2 Netcaster Spider
+ 2 Man-o'-War
+ 2 Lorescale Coatl
+ 1 Nessian Asp
+ 2 Surrakar Banisher
+ 1 Sealock Monster
+ 1 Scourge of Fleets
+ 1 Simic Sky Swallower
+ 1 Inkwell Leviathan
+ 1 Nimbus Swimmer
+Spells
+ 2 Explore
+ 4 Accumulated Knowledge
+ 1 Peel from Reality
+ 2 Time to Feed
+ 1 Explosive Vegetation
+ 1 Ætherize
+ 1 Whelming Wave
+ 1 Plasm Capture
+ 1 Urban Evolution

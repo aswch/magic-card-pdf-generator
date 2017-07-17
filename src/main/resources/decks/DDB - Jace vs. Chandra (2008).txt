@@ -1,0 +1,73 @@
+Jace [DDB] {U}
+
+Lands
+ 23 Island
+ 1 Terrain Generator
+Creatures
+ 1 Æthersnipe
+ 1 Air Elemental
+ 1 Bottle Gnomes
+ 1 Brine Elemental
+ 1 Errant Ephemeron
+ 2 Fathom Seer
+ 1 Fledgling Mawcor
+ 1 Guile
+ 2 Man-o'-War
+ 1 Martyr of Frost
+ 2 Mulldrifter
+ 1 Ophidian
+ 1 Quicksilver Dragon
+ 1 Riftwing Cloudskate
+ 2 Spire Golem
+ 1 Voidmage Apprentice
+ 2 Wall of Deceit
+ 1 Waterspout Djinn
+ 1 Willbender
+Instants
+ 2 Condescend
+ 2 Counterspell
+ 1 Daze
+ 1 Fact or Fiction
+ 1 Gush
+ 2 Repulse
+Sorceries
+ 1 Ancestral Vision
+Artifacts
+ 1 Mind Stone
+Planeswalkers
+ 1 Jace Beleren
+-----------------------------
+Chandra [DDB] {R}
+
+Lands
+ 24 Mountain
+ 1 Keldon Megaliths
+Creatures
+ 1 Chartooth Cougar
+ 1 Fireslinger
+ 2 Flamekin Brawler
+ 1 Flametongue Kavu
+ 1 Flamewave Invoker
+ 2 Furnace Whelp
+ 1 Hostility
+ 1 Ingot Chewer
+ 2 Inner-Flame Acolyte
+ 2 Oxidda Golem
+ 1 Pyre Charger
+ 1 Rakdos Pit Dragon
+ 2 Slith Firewalker
+ 2 Soulbright Flamekin
+Instants
+ 2 Fireblast
+ 1 Flame Javelin
+ 2 Incinerate
+ 1 Magma Jet
+Sorceries
+ 1 Cone of Flame
+ 1 Demonfire
+ 2 Fireball
+ 2 Firebolt
+Enchantments
+ 2 Seal of Fire
+Planeswalkers
+ 1 Chandra Nalaar

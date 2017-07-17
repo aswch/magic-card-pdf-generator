@@ -1,5 +1,5 @@
-Deck
- Built from Scratch [C14] {R}
+Built from Scratch [C14] {R}
+
 COMMANDER
  1 Daretti, Scrap Savant
 Creature (26)

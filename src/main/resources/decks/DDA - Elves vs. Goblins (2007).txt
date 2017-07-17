@@ -1,0 +1,71 @@
+Elves [DDA] {G}
+
+Lands
+ 19 Forest
+ 2 Tranquil Thicket
+ 1 Wirewood Lodge
+Creature
+ 1 Ambush Commander
+ 1 Allosaurus Rider
+ 2 Elvish Eulogist
+ 1 Elvish Harbinger
+ 3 Elvish Warrior
+ 2 Gempalm Strider
+ 1 Heedless One
+ 2 Imperious Perfect
+ 3 Llanowar Elves
+ 2 Lys Alana Huntmaster
+ 1 Stonewood Invoker
+ 1 Sylvan Messenger
+ 1 Timberwatch Elf
+ 1 Voice of the Woods
+ 2 Wellwisher
+ 1 Wirewood Herald
+ 1 Wirewood Symbiote
+ 2 Wood Elves
+ 1 Wren's Run Vanquisher
+Instants
+ 2 Giant Growth
+ 1 Wildsize
+Sorceries
+ 1 Elvish Promenade
+ 1 Harmonize
+Artifacts
+ 3 Moonglove Extract
+ 1 Slate of Ancestry
+---------------------------------
+Goblins [DDA] {R}
+
+Lands
+ 22 Mountain
+ 1 Forgotten Cave
+ 1 Goblin Burrows
+Creatures
+ 1 Akki Coalflinger
+ 1 Clickslither
+ 3 Emberwilde Augur
+ 1 Flamewave Invoker
+ 1 Gempalm Incinerator
+ 3 Goblin Cohort
+ 1 Goblin Matron
+ 1 Goblin Ringleader
+ 1 Goblin Sledder
+ 1 Goblin Warchief
+ 1 Ib Halfheart, Goblin Tactician
+ 1 Mogg Fanatic
+ 2 Mogg War Marshal
+ 2 Mudbutton Torchrunner
+ 2 Raging Goblin
+ 1 Reckless One
+ 1 Siege-Gang Commander
+ 2 Skirk Drill Sergeant
+ 1 Skirk Fire Marshal
+ 1 Skirk Prospector
+ 1 Skirk Shaman
+ 1 Tar Pitcher
+Instants
+ 3 Tarfire
+Sorceries
+ 1 Spitting Earth
+Enchantments
+ 2 Boggart Shenanigans

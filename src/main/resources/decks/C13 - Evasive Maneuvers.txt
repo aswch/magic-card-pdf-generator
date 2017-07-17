@@ -1,5 +1,5 @@
-Deck
- Evasive Maneuvers [C13] {GWU}
+Evasive Maneuvers [C13] {GWU}
+
 COMMANDER
  1 Derevi, Empyrial Tactician
 Creature (29)

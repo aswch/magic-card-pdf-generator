@@ -1,5 +1,5 @@
-Deck
- Breed Lethality [C16]
+Breed Lethality [C16]
+
 COMMANDER
  1 Atraxa, Praetors' Voice
 Creature (27)

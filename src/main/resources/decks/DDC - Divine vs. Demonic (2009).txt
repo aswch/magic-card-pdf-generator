@@ -1,0 +1,72 @@
+Divine [DDC] {W}
+
+Lands
+ 24 Plains
+ 2 Secluded Steppe
+Creatures
+ 1 Akroma, Angel of Wrath
+ 2 Angel of Mercy
+ 2 Angelic Page
+ 1 Angelic Protector
+ 2 Charging Paladin
+ 2 Icatian Priest
+ 1 Luminous Angel
+ 1 Reya Dawnbringer
+ 2 Serra Advocate
+ 1 Serra Angel
+ 2 Sustainer of the Realm
+ 1 Twilight Shepherd
+ 2 Venerable Monk
+Instants
+ 1 Angelsong
+ 1 Healing Salve
+ 2 Otherworldly Journey
+Enchantments
+ 1 Angelic Benediction
+ 2 Faith's Fetters
+ 1 Pacifism
+ 1 Righteous Cause
+ 1 Serra's Boon
+ 1 Serra's Embrace
+Artifacts
+ 1 Angel's Feather
+ 2 Marble Diamond
+-----------------------------
+Demonic [DDC] {B}
+
+Lands
+ 24 Swamp
+ 2 Barren Moor
+Creatures
+ 1 Abyssal Gatekeeper
+ 1 Abyssal Specter
+ 1 Cackling Imp
+ 1 Daggerclaw Imp
+ 2 Demon's Jester
+ 2 Dusk Imp
+ 1 Fallen Angel
+ 1 Foul Imp
+ 1 Kuro, Pitlord
+ 1 Lord of the Pit
+ 2 Overeager Apprentice
+ 1 Reiver Demon
+ 1 Soot Imp
+ 1 Souldrinker
+ 1 Stinkweed Imp
+Instants
+ 1 Dark Banishing
+ 2 Dark Ritual
+Sorceries
+ 1 Barter in Blood
+ 1 Consume Spirit
+ 1 Corrupt
+ 1 Cruel Edict
+ 1 Demonic Tutor
+ 1 Duress
+ 1 Promise of Power
+Enchantments
+ 2 Breeding Pit
+ 1 Oni Possession
+ 2 Unholy Strength
+Artifacts
+ 1 Demon's Horn

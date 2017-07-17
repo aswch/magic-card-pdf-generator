@@ -1,0 +1,89 @@
+Sorin: Hunt and Feed [DDK] {WB}
+
+Lands
+ 2 Evolving Wilds
+ 9 Plains
+ 12 Swamp
+ 2 Tainted Field
+Creatures
+ 1 Bloodrage Vampire
+ 1 Butcher of Malakir
+ 1 Child of Night
+ 2 Doomed Traveler
+ 2 Duskhunter Bat
+ 1 Fiend Hunter
+ 1 Gatekeeper of Malakir
+ 1 Mausoleum Guard
+ 1 Mesmeric Fiend
+ 1 Phantom General
+ 1 Revenant Patriarch
+ 1 Sengir Vampire
+ 1 Twilight Drover
+ 1 Vampire Lacerator
+ 1 Vampire Nighthawk
+ 1 Vampire Outcasts
+ 1 Wall of Omens
+Instants
+ 1 Mortify
+ 1 Sorin's Thirst
+ 1 Unmake
+ 1 Urge to Feed
+ 1 Vampire's Bite
+ 1 Zealous Persecution
+Sorceries
+ 1 Absorb Vis
+ 1 Ancient Craving
+ 1 Death Grasp
+ 1 Decompose
+ 1 Lingering Souls
+ 2 Spectral Procession
+Enchantments
+ 1 Field of Souls
+ 1 Mark of the Vampire
+Planeswalkers
+ 1 Sorin, Lord of Innistrad
+---------------------------------------
+Tibalt: Torment and Agonize [DDK] {BR}
+
+Lands
+ 2 Akoum Refuge
+ 14 Mountain
+ 2 Rakdos Carnarium
+ 6 Swamp
+Creatures
+ 2 Ashmouth Hound
+ 1 Coal Stoker
+ 1 Corpse Connoisseur
+ 1 Gang of Devils
+ 1 Goblin Arsonist
+ 1 Hellrider
+ 2 Hellspark Elemental
+ 1 Lavaborn Muse
+ 1 Mad Prophet
+ 1 Reassembling Skeleton
+ 1 Scorched Rusalka
+ 1 Scourge Devil
+ 1 Shambling Remains
+ 1 Skirsdag Cultist
+ 2 Vithian Stinger
+Instants
+ 1 Blazing Salvo
+ 1 Flame Javelin
+ 1 Geistflame
+ 1 Strangling Soot
+ 1 Terminate
+Sorceries
+ 1 Blightning
+ 1 Breaking Point
+ 2 Browbeat
+ 1 Bump in the Night
+ 1 Devil's Play
+ 1 Faithless Looting
+ 1 Flame Slash
+ 1 Pyroclasm
+ 1 Recoup
+ 1 Torrent of Souls
+Enchantments
+ 1 Sulfuric Vortex
+Planeswalkers
+ 1 Tibalt, the Fiend-Blooded

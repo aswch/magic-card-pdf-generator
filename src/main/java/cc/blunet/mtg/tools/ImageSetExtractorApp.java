@@ -61,7 +61,7 @@ public class ImageSetExtractorApp {
   }
 
   private static BiPredicate<Path, BasicFileAttributes> mtgSetFileFilter(MagicSetType... types) {
-    Set<String> sets = Db.sets().stream()//
+    Set<String> sets = Db.INSTANCE.sets().stream()//
         .filter(s -> ImmutableSet.copyOf(types).contains(s.type())) //
         .map(MagicSet::id) //
         .collect(toImmutableSet());

@@ -27,10 +27,12 @@ import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
 import cc.blunet.common.Unchecked;
+import cc.blunet.mtg.core.AdvDeckFactory;
 import cc.blunet.mtg.core.Deck;
 import cc.blunet.mtg.core.DeckFactory;
 import cc.blunet.mtg.core.PrintedDeck;
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
+import cc.blunet.mtg.db.Db;
 
 /**
  * Creates a Pdf with Magic the Gathering Card-Images from Deck files.
@@ -55,15 +57,16 @@ public class PdfCreatorApp {
     // Predicate<String> deckSelector = n -> n.startsWith("C15");
 
     // run
+    AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(Db.INSTANCE));
 
-    Optional<Deck> collection = collectionPath.map(DeckFactory::createFrom) //
+    Optional<Deck> collection = collectionPath.map(deckFactory::createFrom) //
         .map(Iterables::getOnlyElement);
 
     Predicate<String> fileFilter = n -> (n.endsWith(".txt") || n.endsWith(".md"));
 
     Collection<PrintedDeck> decks = Files //
         .find(deckPath, 99, (path, bfa) -> fileFilter.test(fileName(path))) //
-        .flatMap(p -> DeckFactory.createFrom(p).stream()) //
+        .flatMap(p -> deckFactory.createFrom(p).stream()) //
         .collect(toList());
 
     new PdfCreatorApp().createPdf(decks, collection, imagesPath, resultPath);

@@ -37,26 +37,28 @@ import cc.blunet.mtg.core.MagicSet;
 public final class Db {
   private Db() {}
 
+  public static Db INSTANCE = new Db();
+
   private static SetMultimap<Card, MagicSet> cards = null;
   private static Set<MagicSet> sets = null;
 
-  public static Optional<Card> readCard(String name) {
+  public Optional<Card> readCard(String name) {
     return cards().keySet().stream()//
         .filter(c -> c.name().equals(name) //
             || (c instanceof DoubleFacedCard && ((DoubleFacedCard) c).backsideName().equals(name))) //
         .findFirst();
   }
 
-  public static Multimap<Card, MagicSet> cards() {
+  public Multimap<Card, MagicSet> cards() {
     if (cards == null) {
-      cards = loadCards();
+      cards = loadCards(sets());
     }
     return cards;
   }
 
-  private static SetMultimap<Card, MagicSet> loadCards() {
+  private static SetMultimap<Card, MagicSet> loadCards(Set<MagicSet> sets) {
     ImmutableSetMultimap.Builder<Card, MagicSet> result = ImmutableSetMultimap.builder();
-    for (MagicSet set : sets()) {
+    for (MagicSet set : sets) {
       for (Card card : set.cards()) {
         result.put(card, set);
       }
@@ -67,15 +69,15 @@ public final class Db {
         .build();
   }
 
-  public static SortedSet<MagicSet> sets(Card card) {
+  public SortedSet<MagicSet> sets(Card card) {
     return ImmutableSortedSet.copyOf(Ordering.natural().onResultOf(MagicSet::releasedOn), cards().get(card));
   }
 
-  public static Optional<MagicSet> readSet(String id) {
+  public Optional<MagicSet> readSet(String id) {
     return sets().stream().filter(s -> s.id().equals(id)).findFirst();
   }
 
-  public static Set<MagicSet> sets() {
+  public Set<MagicSet> sets() {
     if (sets == null) {
       sets = loadSets();
     }

@@ -7,7 +7,11 @@ import java.util.Collection;
 
 import org.junit.jupiter.api.Assertions;
 
+import cc.blunet.mtg.db.Db;
+
 public class DeckFactoryTest {
+  private static final AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(Db.INSTANCE));
+
   public static void main(String[] args) throws URISyntaxException {
     DeckFactoryTest test = new DeckFactoryTest();
     test.tappedoutMd();
@@ -16,10 +20,10 @@ public class DeckFactoryTest {
 
   public void tappedoutMd() throws URISyntaxException {
     // given
-    Path md = Paths.get(DeckFactory.class.getResource("Who's a Heretic Now.tappedout.md").toURI());
+    Path md = Paths.get(DeckFactoryTest.class.getResource("Who's a Heretic Now.tappedout.md").toURI());
 
     // when
-    Collection<PrintedDeck> decks = DeckFactory.createFrom(md);
+    Collection<PrintedDeck> decks = deckFactory.createFrom(md);
 
     // then
     Assertions.assertTrue(decks.size() == 1);
@@ -28,11 +32,11 @@ public class DeckFactoryTest {
 
   public void duelDeck() throws URISyntaxException {
     // given
-    Path root = Paths.get(DeckFactory.class.getResource("/decks/").toURI());
+    Path root = Paths.get(DeckFactoryTest.class.getResource("/decks/").toURI());
     Path dda = root.resolve("DDA - Elves vs. Goblins (2007).txt");
 
     // when
-    Collection<PrintedDeck> decks = DeckFactory.createFrom(dda);
+    Collection<PrintedDeck> decks = deckFactory.createFrom(dda);
 
     // then
     Assertions.assertTrue(decks.size() == 2);

@@ -1,33 +1,22 @@
 package cc.blunet.mtg.db;
 
-import static cc.blunet.common.util.Paths2.fileName;
+import static cc.blunet.common.io.data.JacksonUtils.readJsonValue;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static java.util.stream.Collectors.joining;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.zip.ZipInputStream;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ImmutableSortedSet;
@@ -39,7 +28,6 @@ import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.Deck.Card;
 import cc.blunet.mtg.core.Deck.DoubleFacedCard;
 import cc.blunet.mtg.core.MagicSet;
-import cc.blunet.mtg.core.MagicSetType;
 
 /**
  * Simple Db Singleton from json files.
@@ -95,105 +83,27 @@ public final class Db {
   }
 
   private static Set<MagicSet> loadSets() {
-    List<MtgSet> sets = readJsonValue(path("AllSetsArray-x.json.zip"), new TypeReference<List<MtgSet>>() {});
+    List<MagicSet> sets = readJsonValue(dataSource(), objectMapper(), new TypeReference<List<MagicSet>>() {});
 
     return sets.stream() //
-        .filter(s -> !s.code.startsWith("p") && !s.code.equals("FRF_UGIN")) //
-        .map(s -> new MagicSet(s.type, s.code, s.name, s.releaseDate, s.cards)) //
+        .filter(s -> !s.id().startsWith("p") && !s.id().equals("FRF_UGIN")) //
         .collect(toImmutableSet());
   }
 
-  @JsonIgnoreProperties(ignoreUnknown = true)
-  private static final class MtgSet {
-    private final MagicSetType type;
-    private final String name;
-    private final String code;
-    private final LocalDate releaseDate;
-    private final Set<Card> cards;
-
-    @JsonCreator
-    public MtgSet(@JsonProperty("type") String type, //
-        @JsonProperty("code") String code, //
-        @JsonProperty("name") String name, //
-        @JsonProperty("releaseDate") String releaseDate, //
-        @JsonProperty("cards") List<Map<String, Object>> cards) {
-      this.type = type(type);
-      this.code = code;
-      this.name = name;
-      this.releaseDate = LocalDate.parse(releaseDate);
-      this.cards = cards.stream().map(MtgSet::card).collect(toImmutableSet());
-    }
-
-    // TODO safer handling of single instance for double-faced/split cards...
-    private static Card card(Map<String, Object> c) {
-      @SuppressWarnings("unchecked")
-      List<String> names = ((List<String>) c.get("names"));
-      String name = names != null && "split".equals(c.get("layout"))//
-          ? names.stream().collect(joining(" / "))
-          : (String) c.get("name");
-      return names != null && "double-faced".equals(c.get("layout")) //
-          ? new DoubleFacedCard(names.get(0), names.get(1)) //
-          : new Card(name);
-    }
-
-    private static MagicSetType type(String type) {
-      if (type.equals("core") || type.equals("un")) {
-        return MagicSetType.CORE;
-      } else if (type.equals("expansion")) {
-        return MagicSetType.EXPANSION;
-      } else if (type.equals("reprint") || type.equals("from the vault")) {
-        return MagicSetType.REPRINT;
-      } else if (ImmutableSet.of("premium deck", "duel deck", "box", "commander", //
-          "planechase", "archenemy", "conspiracy").contains(type)) {
-        return MagicSetType.DECK;
-      }
-      // "starter", ,"promo", "vanguard", "masters", "masterpiece"
-      return MagicSetType.OTHER;
-    }
+  private static ObjectMapper objectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    SimpleModule module = new SimpleModule("cc.blunet.mtg.db", new Version(3, 9, 3, null, "com.mtgjson", "AllSetsArray-x"));
+    module.addDeserializer(MagicSet.class, new StdDelegatingDeserializer<>(new MagicSetConverter()));
+    mapper.registerModule(module);
+    return mapper;
   }
 
-  private static Path path(String fileName) {
+  private static Path dataSource() {
     try {
-      return Paths.get(Db.class.getResource("/" + fileName).toURI());
+      return Paths.get(Db.class.getResource("/AllSetsArray-x.json.zip").toURI());
     } catch (URISyntaxException ex) {
-      throw Unchecked.<RuntimeException>cast(ex);
-    }
-  }
-
-  // - read json TODO extract to separate class
-
-  public static <T> T readJsonValue(Path file, Class<T> type) {
-    return readValue(file, new ObjectMapper(), type);
-  }
-
-  public static <T> T readJsonValue(Path file, TypeReference<T> type) {
-    return readValue(file, new ObjectMapper(), type);
-  }
-
-  // read from zipped or plaintext files
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private static <T, R> R readValue(Path file, ObjectMapper mapper, T type) {
-    try {
-      Reader reader = reader(file);
-
-      if (type instanceof TypeReference) {
-        return mapper.readValue(reader, (TypeReference) type);
-      } else if (type instanceof JavaType) {
-        return mapper.readValue(reader, (JavaType) type);
-      }
-      return (R) mapper.readValue(reader, (Class) type);
-    } catch (IOException ex) {
       Unchecked.rethrow(ex);
       return null; // unreachable
     }
-  }
-
-  private static Reader reader(Path file) throws IOException, MalformedURLException {
-    if (fileName(file).endsWith(".zip")) {
-      ZipInputStream zip = new ZipInputStream(new FileInputStream(file.toFile()));
-      zip.getNextEntry();
-      return new InputStreamReader(zip, StandardCharsets.UTF_8);
-    }
-    return Files.newBufferedReader(file, StandardCharsets.UTF_8);
   }
 }

@@ -51,16 +51,18 @@ public class PdfCreatorApp {
     // where to read the images
     Path imagesPath = root.resolve("_all");
     // where to write the resulting pdf
-    Path resultPath = deckPath.resolve("C15" + ".pdf");
-    Predicate<String> deckSelector = n -> n.startsWith("C15");
+    Path resultPath = deckPath.resolve("various" + ".pdf");
+    // Predicate<String> deckSelector = n -> n.startsWith("C15");
 
     // run
 
     Optional<Deck> collection = collectionPath.map(DeckFactory::createFrom) //
         .map(Iterables::getOnlyElement);
 
+    Predicate<String> fileFilter = n -> (n.endsWith(".txt") || n.endsWith(".md"));
+
     Collection<PrintedDeck> decks = Files //
-        .find(deckPath, 99, (path, bfa) -> fileName(path).endsWith(".txt") && deckSelector.test(fileName(path))) //
+        .find(deckPath, 99, (path, bfa) -> fileFilter.test(fileName(path))) //
         .flatMap(p -> DeckFactory.createFrom(p).stream()) //
         .collect(toList());
 
@@ -87,6 +89,7 @@ public class PdfCreatorApp {
               // TODO allow selection of exact card when same card is multiple times in set
               imagePath = imagesPath.resolve(imageName(card, ".1"));
             }
+            // FIXME print both sides of a double-sided card!
             PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath.toString(), document);
             // place image in page
             contentStream.drawImage(pdImage, //
@@ -123,8 +126,8 @@ public class PdfCreatorApp {
 
   private String imageName(PrintedCard card, String suffix) {
     String imageName = StringUtils.stripAccents(card.name() //
-        .replace("\"", "") //
-        .replace("//", "-"));
+        .replace("/", "-") //
+        .replace("\"", ""));
     return imageName + "." + card.edition().id() + suffix + ".jpg";
   }
 

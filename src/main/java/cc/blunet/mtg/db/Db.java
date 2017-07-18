@@ -2,6 +2,7 @@ package cc.blunet.mtg.db;
 
 import static cc.blunet.common.util.Paths2.fileName;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static java.util.stream.Collectors.joining;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,6 +37,7 @@ import com.google.common.collect.SetMultimap;
 
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.Deck.Card;
+import cc.blunet.mtg.core.Deck.DoubleFacedCard;
 import cc.blunet.mtg.core.MagicSet;
 import cc.blunet.mtg.core.MagicSetType;
 
@@ -50,8 +52,11 @@ public final class Db {
   private static SetMultimap<Card, MagicSet> cards = null;
   private static Set<MagicSet> sets = null;
 
-  public static Optional<Card> readCard(String id) {
-    return cards().keySet().stream().filter(c -> c.id().equals(id)).findFirst();
+  public static Optional<Card> readCard(String name) {
+    return cards().keySet().stream()//
+        .filter(c -> c.name().equals(name) //
+            || (c instanceof DoubleFacedCard && ((DoubleFacedCard) c).backsideName().equals(name))) //
+        .findFirst();
   }
 
   public static Multimap<Card, MagicSet> cards() {
@@ -93,7 +98,7 @@ public final class Db {
     List<MtgSet> sets = readJsonValue(path("AllSetsArray-x.json.zip"), new TypeReference<List<MtgSet>>() {});
 
     return sets.stream() //
-        .filter(s -> !s.name.startsWith("p") && !s.name.equals("FRF_UGIN")) //
+        .filter(s -> !s.code.startsWith("p") && !s.code.equals("FRF_UGIN")) //
         .map(s -> new MagicSet(s.type, s.code, s.name, s.releaseDate, s.cards)) //
         .collect(toImmutableSet());
   }
@@ -107,13 +112,28 @@ public final class Db {
     private final Set<Card> cards;
 
     @JsonCreator
-    public MtgSet(@JsonProperty("type") String type, @JsonProperty("code") String code, @JsonProperty("name") String name,
-        @JsonProperty("releaseDate") String releaseDate, @JsonProperty("cards") List<Map<String, Object>> cards) {
+    public MtgSet(@JsonProperty("type") String type, //
+        @JsonProperty("code") String code, //
+        @JsonProperty("name") String name, //
+        @JsonProperty("releaseDate") String releaseDate, //
+        @JsonProperty("cards") List<Map<String, Object>> cards) {
       this.type = type(type);
       this.code = code;
       this.name = name;
       this.releaseDate = LocalDate.parse(releaseDate);
-      this.cards = cards.stream().map(c -> new Card((String) c.get("name"))).collect(toImmutableSet());
+      this.cards = cards.stream().map(MtgSet::card).collect(toImmutableSet());
+    }
+
+    // TODO safer handling of single instance for double-faced/split cards...
+    private static Card card(Map<String, Object> c) {
+      @SuppressWarnings("unchecked")
+      List<String> names = ((List<String>) c.get("names"));
+      String name = names != null && "split".equals(c.get("layout"))//
+          ? names.stream().collect(joining(" / "))
+          : (String) c.get("name");
+      return names != null && "double-faced".equals(c.get("layout")) //
+          ? new DoubleFacedCard(names.get(0), names.get(1)) //
+          : new Card(name);
     }
 
     private static MagicSetType type(String type) {

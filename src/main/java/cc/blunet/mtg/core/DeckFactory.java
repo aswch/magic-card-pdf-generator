@@ -57,11 +57,13 @@ public final class DeckFactory {
       if (matcher.find()) {
         int count = Integer.parseInt(matcher.group(1));
         String cardName = matcher.group(2).trim() //
-            .replace("Æ", "Ae"); // canonical English Db naming is "Ae"
+            .replace("Æ", "Ae") // canonical naming is "Ae"
+            .replace("//", "/") // canonical naming is "/"
+            .replaceFirst("(\\w)/(\\w)", "$1 / $2"); // canonical naming for split cards
         Optional<Card> card = Db.readCard(cardName);
         if (card.isPresent()) {
           MagicSet set = Db.readSet(matcher.group(4)) //
-              .orElseGet(() -> defaultSet.get().orElseGet(() -> Db.sets(card.get()).first()));
+              .orElseGet(() -> defaultSet.get().orElseGet(() -> Db.sets(card.get()).last()));
           PrintedCard pCard = new PrintedCard(card.get(), set);
           cards.addAll(Collections.nCopies(count, pCard));
         } else {
@@ -75,7 +77,7 @@ public final class DeckFactory {
           matcher = deckLine.matcher(line);
           if (matcher.find()) {
             Optional.ofNullable(trimToNull(matcher.group(1))).ifPresent(name::set);
-            defaultSet.set(Optional.ofNullable(matcher.group(3)).flatMap(Db::readSet));
+            defaultSet.set(Optional.ofNullable(matcher.group(2)).flatMap(s -> Db.readSet(substring(s, 1, -1))));
           } else {
             // TODO handle Sideboard/Mainboard...
             LOG.info("Omitting non-matching line: {}", line);
@@ -101,7 +103,7 @@ public final class DeckFactory {
   }
 
   private static final Pattern basicMd = Pattern.compile("^[#*+-]+\\s"); // '#'-headings and '*'-,'+'-,'-'-lists
-  private static final Pattern linkMd = Pattern.compile("\\[(.+)\\]\\(http://[-A-Za-z0-9_.@:/?&=!$'()*+,;~]+\\)");
+  private static final Pattern linkMd = Pattern.compile("\\[(.*)\\]\\(http://[-A-Za-z0-9_.@:/?&=!$'()*+,;~]+\\)");
 
   public static List<String> readDeckFile(Path path) throws IOException {
     return Files.readAllLines(path, Charsets.UTF_8).stream() //

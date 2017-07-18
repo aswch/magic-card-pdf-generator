@@ -33,7 +33,6 @@ public class Deck extends BaseEntity<String> {
 
   // - types
 
-  // FIXME handle double-faced cards
   public static class Card extends BaseEntity<String> {
 
     public Card(String name) {
@@ -42,6 +41,26 @@ public class Deck extends BaseEntity<String> {
 
     public String name() {
       return id();
+    }
+  }
+
+  public static class DoubleFacedCard extends Card {
+    private final String name;
+    private final String backsideName;
+
+    public DoubleFacedCard(String name, String backsideName) {
+      super(name + " / " + backsideName);
+      this.name = checkNotNull(name);
+      this.backsideName = checkNotNull(backsideName);
+    }
+
+    @Override
+    public String name() {
+      return name;
+    }
+
+    public String backsideName() {
+      return backsideName;
     }
   }
 

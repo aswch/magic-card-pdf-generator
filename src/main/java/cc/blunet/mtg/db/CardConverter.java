@@ -16,11 +16,14 @@ class CardConverter extends StdConverter<JsonNode, Card> {
     String layout = card.path("layout").asText();
     if ("double-faced".equals(layout)) {
       ArrayNode names = (ArrayNode) card.get("names");
-      return new DoubleFacedCard(names.get(0).asText(), names.get(1).asText());
+      return new DoubleFacedCard(//
+          new Card(names.get(0).asText()), //
+          new Card(names.get(1).asText()));
     }
     if ("split".equals(layout)) {
-      ArrayNode names = (ArrayNode) card.get("names");
-      return new Card(stream(names).map(JsonNode::asText).collect(joining(" / ")));
+      return new Card(stream(card.get("names")) //
+          .map(JsonNode::asText) //
+          .collect(joining(" / ")));
     }
     return new Card(card.get("name").asText());
   }

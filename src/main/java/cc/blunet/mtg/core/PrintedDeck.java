@@ -19,12 +19,18 @@ public final class PrintedDeck extends Deck {
   }
 
   public static class PrintedCard extends Card {
+    private final Card card;
     private final MagicSet edition;
 
     public PrintedCard(Card card, MagicSet edition) {
       // TODO fixme
       super(card.name());
+      this.card = checkNotNull(card);
       this.edition = checkNotNull(edition);
+    }
+
+    public Card card() {
+      return card;
     }
 
     public MagicSet edition() {

@@ -29,6 +29,7 @@ import com.google.common.collect.Multimap;
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.AdvDeckFactory;
 import cc.blunet.mtg.core.Deck;
+import cc.blunet.mtg.core.Deck.DoubleFacedCard;
 import cc.blunet.mtg.core.DeckFactory;
 import cc.blunet.mtg.core.PrintedDeck;
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
@@ -92,7 +93,6 @@ public class PdfCreatorApp {
               // TODO allow selection of exact card when same card is multiple times in set
               imagePath = imagesPath.resolve(imageName(card, ".1"));
             }
-            // FIXME print both sides of a double-sided card!
             PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath.toString(), document);
             // place image in page
             contentStream.drawImage(pdImage, //
@@ -149,6 +149,14 @@ public class PdfCreatorApp {
           result.add(page);
         }
         page.put(deck, card);
+
+        if (card.card() instanceof DoubleFacedCard) {
+          if (counter++ % 9 == 0) {
+            page = LinkedListMultimap.create();
+            result.add(page);
+          }
+          page.put(deck, new PrintedCard(((DoubleFacedCard) card.card()).back(), card.edition()));
+        }
       }
     }
     return result;

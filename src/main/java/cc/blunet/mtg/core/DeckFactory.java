@@ -68,13 +68,14 @@ public final class DeckFactory {
         if (matcher.find()) {
           // eat line
         } else {
+          // TODO match title only on first line?
           matcher = deckLine.matcher(line);
           if (matcher.find()) {
             Optional.ofNullable(trimToNull(matcher.group(1))).ifPresent(name::set);
             defaultSet.set(Optional.ofNullable(matcher.group(2)) //
                 .flatMap(s -> db.readSet(substring(s, 1, -1))));
           } else {
-            // TODO handle Sideboard/Mainboard...
+            // FIXME handle Sideboard/Mainboard...
             LOG.info("Omitting non-matching line: {}", line);
           }
         }

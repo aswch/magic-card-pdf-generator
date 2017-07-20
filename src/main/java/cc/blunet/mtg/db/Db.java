@@ -45,7 +45,7 @@ public final class Db {
   public Optional<Card> readCard(String name) {
     return cards().keySet().stream()//
         .filter(c -> c.name().equals(name) //
-            || (c instanceof DoubleFacedCard && ((DoubleFacedCard) c).backsideName().equals(name))) //
+            || (c instanceof DoubleFacedCard && ((DoubleFacedCard) c).back().name().equals(name))) //
         .findFirst();
   }
 

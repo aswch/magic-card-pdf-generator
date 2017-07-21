@@ -33,7 +33,7 @@ public final class DeckFactory {
   private static final Pattern section = Pattern.compile("^$|^(Mainboard|Sorcer(y|ies)|(Commander|Instant|" //
       + "|Planeswalker|Creature|Enchantment|Artifact|Land)s?)(\\s+\\(\\d+\\))?$", CASE_INSENSITIVE);
   private static final Pattern deckLine = Pattern.compile("^(\\w[^\\[\\{]+(\\[\\w{3}\\])?)( \\{\\w+\\})?$");
-  private static final Pattern cardLine = Pattern.compile("^(\\d+)x?\\s+([^\\[]+)(\\s+\\[(\\w{3})(\\d)?\\])?$");
+  private static final Pattern cardLine = Pattern.compile("^(\\d+)x?\\s+([^\\[]+)(\\s+\\[(\\w{3})(\\d+)?\\])?$");
 
   private final Db db;
 
@@ -100,6 +100,7 @@ public final class DeckFactory {
 
     int variation = Optional.ofNullable(var) //
         .map(Integer::parseUnsignedInt) //
+        .map(num -> num - 1) //
         .orElse(0);
 
     int variants = magicSet.cards().count(card);

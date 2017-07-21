@@ -9,7 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -79,6 +81,8 @@ public class PdfCreatorApp {
     List<Float> x = ImmutableList.of(11.0f, 74.0f, 137.0f);
     List<Float> y = ImmutableList.of(16.0f, 104.0f, 192.0f).reverse();
 
+    Map<Path, PDImageXObject> images = new HashMap<>();
+
     try (final PDDocument document = new PDDocument()) {
       for (Multimap<Deck, PrintedCard> part : paged(decks, collection)) {
 
@@ -88,8 +92,11 @@ public class PdfCreatorApp {
           int i = 0;
           for (PrintedCard card : part.values()) {
             // add image to document (NOTE: images of same path are only added once)
-            Path imagePath = imagesPath.resolve(imageName(card));
-            PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath.toString(), document);
+            Path path = imagesPath.resolve(imageName(card));
+            if (!images.containsKey(path)) {
+              images.put(path, PDImageXObject.createFromFile(path.toString(), document));
+            }
+            PDImageXObject pdImage = images.get(path);
             // place image in page
             contentStream.drawImage(pdImage, //
                 x.get(i % 3) * POINTS_PER_MM, //
@@ -130,7 +137,9 @@ public class PdfCreatorApp {
         .replace("\"", ""));
 
     // when more than 1 variants, add 1 (start with 1)
-    int variant = card.variation() + (card.edition().cards().count(card.card()) > 1 ? 1 : 0);
+    int variant = card.edition().cards().count(card.card()) > 1 //
+        ? card.variation() + 1 //
+        : card.variation();
 
     String suffix = variant > 0 ? "." + variant : "";
     return name + "." + card.edition().id() + suffix + ".jpg";

@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 
 import cc.blunet.mtg.core.Deck.Card;
+import cc.blunet.mtg.core.Deck.SimpleCard;
 import cc.blunet.mtg.core.MagicSet;
 import cc.blunet.mtg.core.MagicSetType;
 
@@ -28,8 +29,7 @@ class MagicSetConverter extends StdConverter<JsonNode, MagicSet> {
     Set<String> twinCardNames = new HashSet<>();
     Multiset<Card> cards = stream(value.path("cards")) //
         .map(cardConverter::convert) //
-        // TODO do this in a nice way...
-        .filter(c -> !c.id().contains("/") || twinCardNames.add(c.id())) //
+        .filter(c -> c instanceof SimpleCard || twinCardNames.add(c.name())) //
         .collect(toImmutableMultiset());
     return new MagicSet(type(type), code, name, LocalDate.parse(releaseDate), cards);
   }

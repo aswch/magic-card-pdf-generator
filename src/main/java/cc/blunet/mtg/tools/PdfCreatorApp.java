@@ -30,7 +30,6 @@ import com.google.common.collect.Multimap;
 
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.AdvDeckFactory;
-import cc.blunet.mtg.core.Deck;
 import cc.blunet.mtg.core.Deck.DoubleFacedCard;
 import cc.blunet.mtg.core.DeckFactory;
 import cc.blunet.mtg.core.PrintedDeck;
@@ -62,7 +61,7 @@ public class PdfCreatorApp {
     // run
     AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(Db.INSTANCE));
 
-    Optional<Deck> collection = collectionPath.map(deckFactory::createFrom) //
+    Optional<PrintedDeck> collection = collectionPath.map(deckFactory::createFrom) //
         .map(Iterables::getOnlyElement);
 
     Predicate<String> fileFilter = n -> (n.endsWith(".txt") || n.endsWith(".md"));
@@ -77,14 +76,14 @@ public class PdfCreatorApp {
 
   private static final float POINTS_PER_MM = 2.834646F;
 
-  public void createPdf(Collection<PrintedDeck> decks, Optional<Deck> collection, Path imagesPath, Path resultPath) {
+  public void createPdf(Collection<PrintedDeck> decks, Optional<PrintedDeck> collection, Path imagesPath, Path resultPath) {
     List<Float> x = ImmutableList.of(11.0f, 74.0f, 137.0f);
     List<Float> y = ImmutableList.of(16.0f, 104.0f, 192.0f).reverse();
 
     Map<Path, PDImageXObject> images = new HashMap<>();
 
     try (final PDDocument document = new PDDocument()) {
-      for (Multimap<Deck, PrintedCard> part : paged(decks, collection)) {
+      for (Multimap<PrintedDeck, PrintedCard> part : paged(decks, collection)) {
 
         final PDPage page = new PDPage(PDRectangle.A4);
         try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
@@ -132,7 +131,7 @@ public class PdfCreatorApp {
   }
 
   private String imageName(PrintedCard card) {
-    String name = StringUtils.stripAccents(card.name() //
+    String name = StringUtils.stripAccents(card.card().name() //
         .replace("/", "-") //
         .replace("\"", ""));
 
@@ -146,12 +145,12 @@ public class PdfCreatorApp {
   }
 
   // paged list of cards to be printed from given decks, minus those already in given collection
-  private List<Multimap<Deck, PrintedCard>> paged(Collection<PrintedDeck> decks, Optional<Deck> collection) {
-    List<Multimap<Deck, PrintedCard>> result = new ArrayList<>();
-    Multimap<Deck, PrintedCard> page = null;
+  private List<Multimap<PrintedDeck, PrintedCard>> paged(Collection<PrintedDeck> decks, Optional<PrintedDeck> collection) {
+    List<Multimap<PrintedDeck, PrintedCard>> result = new ArrayList<>();
+    Multimap<PrintedDeck, PrintedCard> page = null;
     int counter = 0;
     for (PrintedDeck deck : decks) {
-      for (PrintedCard card : deck.printedCards()) {
+      for (PrintedCard card : deck.cards()) {
         if (collection.isPresent() && collection.get().cards().contains(card)) {
           continue;
         }

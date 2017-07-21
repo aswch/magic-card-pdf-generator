@@ -2,8 +2,16 @@ package cc.blunet.mtg.core;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.ImmutableList.toImmutableList;
+import static java.util.stream.Collectors.joining;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMultiset;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 
 import cc.blunet.common.BaseEntity;
@@ -12,12 +20,7 @@ public class Deck extends BaseEntity<String> {
 
   private final Multiset<Card> cards;
 
-  Deck() {
-    super("empty");
-    cards = ImmutableMultiset.of();
-  }
-
-  Deck(String name, Multiset<Card> cards) {
+  public Deck(String name, Multiset<Card> cards) {
     super(name);
     this.cards = ImmutableMultiset.copyOf(checkNotNull(cards));
     checkArgument(!cards.isEmpty());
@@ -43,37 +46,101 @@ public class Deck extends BaseEntity<String> {
       return id();
     }
   }
+  public static final class SimpleCard extends Card {
 
-  // TODO do this for split cards as well...
-  public static class DoubleFacedCard extends Card {
-    private final Card front;
-    private final Card back;
+    public SimpleCard(String name) {
+      super(name);
+    }
+  }
+
+  public static abstract class MultiCard extends Card {
+    protected final List<Card> cards;
+
+    public MultiCard(Card... cards) {
+      this(Stream.of(cards).distinct().collect(toImmutableList()));
+      checkState(cards.length == this.cards.size());
+    }
+
+    private MultiCard(List<Card> cards) {
+      super(cards.stream().map(Card::name).collect(joining(" / ")));
+      this.cards = checkNotNull(cards);
+    }
+
+    public Set<Card> cards() {
+      return ImmutableSet.copyOf(cards);
+    }
+  }
+  /**
+   * A double-sided card's name is it's front side name.
+   */
+  public static final class DoubleFacedCard extends MultiCard {
 
     public DoubleFacedCard(Card front, Card back) {
-      super(front.id() + " / " + back.id());
-      this.front = checkNotNull(front);
-      this.back = checkNotNull(back);
+      super(front, back);
     }
 
     @Override
     public String name() {
-      return front.name();
+      return cards.get(0).name();
     }
 
     public Card back() {
-      return back;
+      return cards.get(1);
     }
   }
 
-  // - factory
+  /**
+   * A flip-card's name is it's front side name.
+   */
+  public static final class FlipCard extends MultiCard {
 
-  private static final Deck EMPTY = new Deck();
+    public FlipCard(Card top, Card bottom) {
+      super(top, bottom);
+    }
 
-  public static Deck empty() {
-    return EMPTY;
+    @Override
+    public String name() {
+      return cards.get(0).name();
+    }
+
+    public Card bottom() {
+      return cards.get(1);
+    }
   }
 
-  public static Deck of(String name, Multiset<Card> cards) {
-    return new Deck(name, cards);
+  /**
+   * A split-card's name is composed of both cards.
+   */
+  public static final class SplitCard extends MultiCard {
+
+    public SplitCard(Card left, Card right) {
+      super(left, right);
+    }
+
+    public Card left() {
+      return cards.get(0);
+    }
+
+    public Card right() {
+      return cards.get(1);
+    }
+  }
+
+  /**
+   * An aftermath-card's name is composed of both cards.
+   */
+  public static final class AftermathCard extends MultiCard {
+
+    public AftermathCard(Card left, Card right) {
+      super(left, right);
+    }
+
+    public Card top() {
+      return cards.get(0);
+    }
+
+    public Card bottom() {
+      return cards.get(1);
+    }
   }
 }

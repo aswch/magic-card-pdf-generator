@@ -1,31 +1,48 @@
 package cc.blunet.mtg.core;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.ImmutableMultiset.toImmutableMultiset;
 
+import java.util.Objects;
+
+import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
-public final class PrintedDeck extends Deck {
+import cc.blunet.common.BaseEntity;
+import cc.blunet.common.ValueObject;
+import cc.blunet.mtg.core.Deck.Card;
 
-  PrintedDeck() {}
+public final class PrintedDeck extends BaseEntity<String> {
 
-  PrintedDeck(String name, Multiset<PrintedCard> cards) {
-    super(name, (Multiset) cards);
+  private final Multiset<PrintedCard> cards;
+
+  public PrintedDeck(String name, Multiset<PrintedCard> cards) {
+    super(name);
+    this.cards = ImmutableMultiset.copyOf(checkNotNull(cards));
+    checkArgument(!cards.isEmpty());
   }
 
-  // TODO fixme
-  public Multiset<PrintedCard> printedCards() {
-    return (Multiset) super.cards();
+  public String name() {
+    return id();
   }
 
-  public static class PrintedCard extends Card {
+  public Multiset<PrintedCard> cards() {
+    return cards;
+  }
+
+  public Deck asDeck() {
+    return new Deck(name(), cards.stream() //
+        .map(PrintedCard::card) //
+        .collect(toImmutableMultiset()));
+  }
+
+  public static final class PrintedCard extends ValueObject {
     private final Card card;
     private final MagicSet edition;
     private final int variation;
 
-      // TODO fixme
     public PrintedCard(Card card, MagicSet edition, int variation) {
-      super(card.name());
       this.card = checkNotNull(card);
       this.edition = checkNotNull(edition);
       this.variation = variation;
@@ -42,18 +59,20 @@ public final class PrintedDeck extends Deck {
     public int variation() {
       return variation;
     }
-  }
 
-  // - factory
+    @Override
+    public boolean equals(Object obj) {
+      return this == obj //
+          || (obj != null //
+              && getClass() == obj.getClass() //
+              && Objects.equals(card, ((PrintedCard) obj).card) //
+              && Objects.equals(edition, ((PrintedCard) obj).edition) //
+              && Objects.equals(variation, ((PrintedCard) obj).variation));
+    }
 
-  private static final PrintedDeck EMPTY = new PrintedDeck();
-
-  public static PrintedDeck empty() {
-    return EMPTY;
-  }
-
-  // TODO fixme
-  public static PrintedDeck _of(String name, Multiset<PrintedCard> cards) {
-    return new PrintedDeck(name, cards);
+    @Override
+    public final int hashCode() {
+      return Objects.hash(card, edition, variation);
+    }
   }
 }

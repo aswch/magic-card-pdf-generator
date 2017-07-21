@@ -10,12 +10,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.util.StdConverter;
 
-import cc.blunet.mtg.core.Deck.AftermathCard;
-import cc.blunet.mtg.core.Deck.Card;
-import cc.blunet.mtg.core.Deck.DoubleFacedCard;
-import cc.blunet.mtg.core.Deck.FlipCard;
-import cc.blunet.mtg.core.Deck.SimpleCard;
-import cc.blunet.mtg.core.Deck.SplitCard;
+import cc.blunet.mtg.core.Card;
+import cc.blunet.mtg.core.Card.AftermathCard;
+import cc.blunet.mtg.core.Card.DoubleFacedCard;
+import cc.blunet.mtg.core.Card.FlipCard;
+import cc.blunet.mtg.core.Card.SimpleCard;
+import cc.blunet.mtg.core.Card.SplitCard;
 
 class CardConverter extends StdConverter<JsonNode, Card> {
   public static final Logger LOG = LoggerFactory.getLogger(CardConverter.class);

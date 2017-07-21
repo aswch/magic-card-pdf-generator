@@ -11,7 +11,6 @@ import com.google.common.collect.Multiset;
 
 import cc.blunet.common.BaseEntity;
 import cc.blunet.common.ValueObject;
-import cc.blunet.mtg.core.Deck.Card;
 
 public final class PrintedDeck extends BaseEntity<String> {
 

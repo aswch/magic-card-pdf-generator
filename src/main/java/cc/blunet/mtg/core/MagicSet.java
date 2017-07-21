@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import com.google.common.collect.Multiset;
 
 import cc.blunet.common.BaseEntity;
-import cc.blunet.mtg.core.Deck.Card;
 
 public final class MagicSet extends BaseEntity<String> {
 

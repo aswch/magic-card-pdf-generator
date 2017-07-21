@@ -30,7 +30,7 @@ import com.google.common.collect.Multimap;
 
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.AdvDeckFactory;
-import cc.blunet.mtg.core.Deck.DoubleFacedCard;
+import cc.blunet.mtg.core.Card.DoubleFacedCard;
 import cc.blunet.mtg.core.DeckFactory;
 import cc.blunet.mtg.core.PrintedDeck;
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;

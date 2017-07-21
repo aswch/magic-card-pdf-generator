@@ -25,8 +25,8 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.SetMultimap;
 
 import cc.blunet.common.Unchecked;
-import cc.blunet.mtg.core.Deck.Card;
-import cc.blunet.mtg.core.Deck.DoubleFacedCard;
+import cc.blunet.mtg.core.Card;
+import cc.blunet.mtg.core.Card.DoubleFacedCard;
 import cc.blunet.mtg.core.MagicSet;
 
 /**

@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.util.StdConverter;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 
-import cc.blunet.mtg.core.Deck.Card;
-import cc.blunet.mtg.core.Deck.SimpleCard;
+import cc.blunet.mtg.core.Card;
+import cc.blunet.mtg.core.Card.SimpleCard;
 import cc.blunet.mtg.core.MagicSet;
 import cc.blunet.mtg.core.MagicSetType;
 

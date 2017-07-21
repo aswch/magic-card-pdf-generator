@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableSet;
 
-import cc.blunet.mtg.core.Deck.Card;
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
 import cc.blunet.mtg.db.Db;
 

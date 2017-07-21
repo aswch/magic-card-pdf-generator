@@ -1,14 +1,16 @@
 package cc.blunet.mtg.db;
 
 import static cc.blunet.common.io.data.JacksonUtils.stream;
-import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static com.google.common.collect.ImmutableMultiset.toImmutableMultiset;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.StdConverter;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multiset;
 
 import cc.blunet.mtg.core.Deck.Card;
 import cc.blunet.mtg.core.MagicSet;
@@ -23,9 +25,12 @@ class MagicSetConverter extends StdConverter<JsonNode, MagicSet> {
     String code = value.get("code").asText();
     String name = value.get("name").asText();
     String releaseDate = value.get("releaseDate").asText();
-    Set<Card> cards = stream(value.path("cards")) //
+    Set<String> twinCardNames = new HashSet<>();
+    Multiset<Card> cards = stream(value.path("cards")) //
         .map(cardConverter::convert) //
-        .collect(toImmutableSet());
+        // TODO do this in a nice way...
+        .filter(c -> !c.id().contains("/") || twinCardNames.add(c.id())) //
+        .collect(toImmutableMultiset());
     return new MagicSet(type(type), code, name, LocalDate.parse(releaseDate), cards);
   }
 

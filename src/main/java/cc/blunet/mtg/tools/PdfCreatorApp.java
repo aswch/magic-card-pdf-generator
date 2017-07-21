@@ -88,11 +88,7 @@ public class PdfCreatorApp {
           int i = 0;
           for (PrintedCard card : part.values()) {
             // add image to document (NOTE: images of same path are only added once)
-            Path imagePath = imagesPath.resolve(imageName(card, ""));
-            if (!imagePath.toFile().exists()) {
-              // TODO allow selection of exact card when same card is multiple times in set
-              imagePath = imagesPath.resolve(imageName(card, ".1"));
-            }
+            Path imagePath = imagesPath.resolve(imageName(card));
             PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath.toString(), document);
             // place image in page
             contentStream.drawImage(pdImage, //
@@ -102,6 +98,7 @@ public class PdfCreatorApp {
                 88.0f * POINTS_PER_MM);
             i++;
           }
+          // FIXME blacken card corners/borders
           // write deckname onto page
           String text = part.keySet().stream() //
               .map(deck -> deck.name() + " (" + part.get(deck).size() + ")") //
@@ -127,11 +124,16 @@ public class PdfCreatorApp {
     content.endText();
   }
 
-  private String imageName(PrintedCard card, String suffix) {
-    String imageName = StringUtils.stripAccents(card.name() //
+  private String imageName(PrintedCard card) {
+    String name = StringUtils.stripAccents(card.name() //
         .replace("/", "-") //
         .replace("\"", ""));
-    return imageName + "." + card.edition().id() + suffix + ".jpg";
+
+    // when more than 1 variants, add 1 (start with 1)
+    int variant = card.variation() + (card.edition().cards().count(card.card()) > 1 ? 1 : 0);
+
+    String suffix = variant > 0 ? "." + variant : "";
+    return name + "." + card.edition().id() + suffix + ".jpg";
   }
 
   // paged list of cards to be printed from given decks, minus those already in given collection
@@ -155,7 +157,7 @@ public class PdfCreatorApp {
             page = LinkedListMultimap.create();
             result.add(page);
           }
-          page.put(deck, new PrintedCard(((DoubleFacedCard) card.card()).back(), card.edition()));
+          page.put(deck, new PrintedCard(((DoubleFacedCard) card.card()).back(), card.edition(), card.variation()));
         }
       }
     }

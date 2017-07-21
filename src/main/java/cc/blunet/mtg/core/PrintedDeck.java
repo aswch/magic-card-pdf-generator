@@ -21,12 +21,14 @@ public final class PrintedDeck extends Deck {
   public static class PrintedCard extends Card {
     private final Card card;
     private final MagicSet edition;
+    private final int variation;
 
-    public PrintedCard(Card card, MagicSet edition) {
       // TODO fixme
+    public PrintedCard(Card card, MagicSet edition, int variation) {
       super(card.name());
       this.card = checkNotNull(card);
       this.edition = checkNotNull(edition);
+      this.variation = variation;
     }
 
     public Card card() {
@@ -35,6 +37,10 @@ public final class PrintedDeck extends Deck {
 
     public MagicSet edition() {
       return edition;
+    }
+
+    public int variation() {
+      return variation;
     }
   }
 

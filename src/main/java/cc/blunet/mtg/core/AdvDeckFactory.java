@@ -20,6 +20,11 @@ import com.google.common.collect.ImmutableList;
 
 import cc.blunet.common.Unchecked;
 
+/**
+ * Creates {@link PrintedDeck}s from deck-files. Also supports basic markdown markup.
+ *
+ * @author claude.nobs@blunet.cc
+ */
 public class AdvDeckFactory {
 
   private static final Pattern basicMd = Pattern.compile("^[#*+-]+\\s"); // '#'-headings and '*'-,'+'-,'-'-lists

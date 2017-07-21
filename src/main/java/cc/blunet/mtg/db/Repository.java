@@ -30,14 +30,11 @@ import cc.blunet.mtg.core.Card.DoubleFacedCard;
 import cc.blunet.mtg.core.MagicSet;
 
 /**
- * Simple Db Singleton from json files.
+ * Simple Repository reading data from json file.
  *
  * @author claude.nobs@blunet.cc
  */
-public final class Db {
-  private Db() {}
-
-  public static Db INSTANCE = new Db();
+public final class Repository {
 
   private static SetMultimap<Card, MagicSet> cards = null;
   private static Set<MagicSet> sets = null;
@@ -102,7 +99,7 @@ public final class Db {
 
   private static Path dataSource() {
     try {
-      return Paths.get(Db.class.getResource("/AllSetsArray-x.json.zip").toURI());
+      return Paths.get(Repository.class.getResource("/AllSetsArray-x.json.zip").toURI());
     } catch (URISyntaxException ex) {
       Unchecked.rethrow(ex);
       return null; // unreachable

@@ -22,7 +22,7 @@ import com.google.common.collect.ImmutableSet;
 import cc.blunet.common.io.compression.ZipArchive;
 import cc.blunet.mtg.core.MagicSet;
 import cc.blunet.mtg.core.MagicSetType;
-import cc.blunet.mtg.db.Db;
+import cc.blunet.mtg.db.Repository;
 
 /**
  * Extracts Magic the Gathering Images from Set.zip files.
@@ -61,7 +61,7 @@ public class ImageSetExtractorApp {
   }
 
   private static BiPredicate<Path, BasicFileAttributes> mtgSetFileFilter(MagicSetType... types) {
-    Set<String> sets = Db.INSTANCE.sets().stream()//
+    Set<String> sets = new Repository().sets().stream() //
         .filter(s -> ImmutableSet.copyOf(types).contains(s.type())) //
         .map(MagicSet::id) //
         .collect(toImmutableSet());

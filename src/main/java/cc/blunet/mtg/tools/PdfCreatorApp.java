@@ -34,7 +34,7 @@ import cc.blunet.mtg.core.Card.DoubleFacedCard;
 import cc.blunet.mtg.core.DeckFactory;
 import cc.blunet.mtg.core.PrintedDeck;
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
-import cc.blunet.mtg.db.Db;
+import cc.blunet.mtg.db.Repository;
 
 /**
  * Creates a Pdf with Magic the Gathering Card-Images from Deck files.
@@ -59,7 +59,7 @@ public class PdfCreatorApp {
     // Predicate<String> deckSelector = n -> n.startsWith("C15");
 
     // run
-    AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(Db.INSTANCE));
+    AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(new Repository()));
 
     Optional<PrintedDeck> collection = collectionPath.map(deckFactory::createFrom) //
         .map(Iterables::getOnlyElement);

@@ -8,19 +8,18 @@ import java.util.Collection;
 import java.util.Optional;
 
 import cc.blunet.mtg.core.AdvDeckFactory;
-import cc.blunet.mtg.core.Deck;
 import cc.blunet.mtg.core.DeckFactory;
 import cc.blunet.mtg.core.PrintedDeck;
-import cc.blunet.mtg.db.Db;
+import cc.blunet.mtg.db.Repository;
 
 public class PdfCreatorAppTest {
-  private static final AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(Db.INSTANCE));
+  private static final AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(new Repository()));
 
   public static void main(String[] args) throws URISyntaxException, IOException {
     // given
     Path root = Paths.get(PdfCreatorAppTest.class.getResource(".").toURI());
     Collection<PrintedDeck> decks = deckFactory.createFrom(root.resolve("decklist.txt"));
-    Optional<Deck> collection = Optional.empty();
+    Optional<PrintedDeck> collection = Optional.empty();
     Path imagesPath = root;
     Path resultPath = root;
 

@@ -23,8 +23,13 @@ import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableSet;
 
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
-import cc.blunet.mtg.db.Db;
+import cc.blunet.mtg.db.Repository;
 
+/**
+ * Creates {@link PrintedDeck}s by parsing lines of text.
+ *
+ * @author claude.nobs@blunet.cc
+ */
 public final class DeckFactory {
 
   private static final Logger LOG = LoggerFactory.getLogger(DeckFactory.class);
@@ -34,9 +39,9 @@ public final class DeckFactory {
   private static final Pattern deckLine = Pattern.compile("^(\\w[^\\[\\{]+(\\[\\w{3}\\])?)( \\{\\w+\\})?$");
   private static final Pattern cardLine = Pattern.compile("^(\\d+)x?\\s+([^\\[]+)(\\s+\\[(\\w{3})(\\d+)?\\])?$");
 
-  private final Db db;
+  private final Repository db;
 
-  public DeckFactory(Db db) {
+  public DeckFactory(Repository db) {
     this.db = checkNotNull(db);
   }
 
@@ -70,7 +75,7 @@ public final class DeckFactory {
         if (matcher.find()) {
           // eat line
         } else {
-          // TODO match title only on first line?
+          // TODO cleanup: match title only on first line
           matcher = deckLine.matcher(line);
           if (matcher.find()) {
             Optional.ofNullable(trimToNull(matcher.group(1))).ifPresent(name::set);

@@ -21,7 +21,7 @@ import cc.blunet.common.io.compression.ZipArchive;
 import cc.blunet.common.util.Paths2;
 
 /**
- * Updates the Db from mtgjson.org.
+ * Updates the json Db file from mtgjson.org.
  *
  * @author claude.nobs@blunet.cc
  */

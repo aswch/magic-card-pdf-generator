@@ -7,10 +7,10 @@ import java.util.Collection;
 
 import org.junit.jupiter.api.Assertions;
 
-import cc.blunet.mtg.db.Db;
+import cc.blunet.mtg.db.Repository;
 
 public class DeckFactoryTest {
-  private static final AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(Db.INSTANCE));
+  private static final AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(new Repository()));
 
   public static void main(String[] args) throws URISyntaxException {
     DeckFactoryTest test = new DeckFactoryTest();

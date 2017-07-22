@@ -9,23 +9,32 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.CharStreams;
 
 import cc.blunet.common.io.compression.ZipArchive;
 import cc.blunet.common.util.Paths2;
 
 /**
- * Updates the json Db file from mtgjson.org.
+ * Updates the json Db from mtgjson.org.
  *
  * @author claude.nobs@blunet.cc
  */
 public class JsonDbUpdaterApp {
+
+  // single card from mtgjson 3.10.0 onwards
+  private static final Set<String> tokenCards = ImmutableSet.of(//
+      "Brisela, Voice of Nightmares", // meld card
+      "Chittering Host", // meld card
+      "Hanweir, the Writhing Township" // meld card
+  );
 
   @SuppressWarnings("unchecked")
   public static void main(String[] args) throws IOException, URISyntaxException {
@@ -40,6 +49,10 @@ public class JsonDbUpdaterApp {
     json.forEach(set -> {
       ((List<Map<String, Object>>) set.get("cards")).forEach(card -> {
         card.remove("foreignNames");
+        String name = (String) card.get("name");
+        if (tokenCards.contains(name)) {
+          card.put("layout", "token");
+        }
       });
     });
 

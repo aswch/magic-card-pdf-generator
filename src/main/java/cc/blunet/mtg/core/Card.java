@@ -95,6 +95,10 @@ public abstract class Card extends BaseEntity<String> {
       super(left, right);
     }
 
+    public SplitCard(Card... cards) {
+      super(cards);
+    }
+
     public Card left() {
       return cards.get(0);
     }
@@ -119,6 +123,31 @@ public abstract class Card extends BaseEntity<String> {
 
     public Card bottom() {
       return cards.get(1);
+    }
+  }
+
+  /**
+   * Logically one card, consisting of two halves.
+   */
+  public static final class TwoPartCard extends Card {
+
+    public TwoPartCard(String name, String part) {
+      super(name + " (" + part + ")");
+    }
+
+    public String groupId() {
+      return id().substring(0, id().lastIndexOf(' '));
+    }
+  }
+
+  // FIXME link tokens to cards, get db of tokens...
+  /**
+   * Tokens are not in the deck or sideboard.
+   */
+  public static final class TokenCard extends Card {
+
+    public TokenCard(String name) {
+      super(name);
     }
   }
 }

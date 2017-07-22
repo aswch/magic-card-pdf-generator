@@ -1,6 +1,6 @@
 package cc.blunet.mtg.db;
 
-import static cc.blunet.common.io.data.JacksonUtils.stream;
+import static cc.blunet.common.io.serialization.JacksonUtils.stream;
 import static java.util.stream.Collectors.joining;
 
 import java.util.Map;

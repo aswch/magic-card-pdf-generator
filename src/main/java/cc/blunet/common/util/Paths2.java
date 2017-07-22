@@ -1,19 +1,24 @@
 package cc.blunet.common.util;
 
-import static org.apache.commons.lang3.StringUtils.substring;
-
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Paths2 {
+public final class Paths2 {
+  private Paths2() {}
 
   public static String fileName(Path file) {
     return file.getFileName().toString();
   }
 
   public static String stripFileSuffix(String fileName) {
-    return substring(fileName, 0, -4);
+    return fileName.contains(".") //
+        ? fileName.substring(0, fileName.lastIndexOf('.'))
+        : fileName;
+  }
+
+  public static Path of(Class<?> clazz) throws URISyntaxException {
+    return of(clazz, ".");
   }
 
   public static Path of(Class<?> clazz, String name) throws URISyntaxException {

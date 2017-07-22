@@ -1,6 +1,6 @@
 package cc.blunet.mtg.db;
 
-import static cc.blunet.common.io.data.JacksonUtils.readJsonValue;
+import static cc.blunet.common.io.serialization.JacksonUtils.readJsonValue;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 import java.net.URISyntaxException;
@@ -36,8 +36,8 @@ import cc.blunet.mtg.core.MagicSet;
  */
 public final class Repository {
 
-  private static SetMultimap<Card, MagicSet> cards = null;
-  private static Set<MagicSet> sets = null;
+  private SetMultimap<Card, MagicSet> cards = null;
+  private Set<MagicSet> sets = null;
 
   public Optional<Card> readCard(String name) {
     return cards().keySet().stream()//

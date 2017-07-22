@@ -1,12 +1,13 @@
-package cc.blunet.common.io.data;
+package cc.blunet.common.io.serialization;
 
 import static cc.blunet.common.util.Paths2.fileName;
 
-import java.io.FileInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.MalformedURLException;
+import java.nio.channels.Channels;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,8 +42,9 @@ public final class JacksonUtils {
   // read from zipped or plaintext files
   @SuppressWarnings({"rawtypes", "unchecked"})
   private static <T, R> R readValue(Path file, ObjectMapper mapper, T type) {
-    try {
-      Reader reader = reader(file);
+
+    try (InputStream is = Channels.newInputStream(Files.newByteChannel(file))) {
+      Reader reader = reader(file, is);
 
       // support abstract type materialization
       mapper.registerModule(new MrBeanModule());
@@ -59,12 +61,12 @@ public final class JacksonUtils {
     }
   }
 
-  private static Reader reader(Path file) throws IOException, MalformedURLException {
+  private static Reader reader(Path file, InputStream is) throws IOException {
     if (fileName(file).endsWith(".zip")) {
-      ZipInputStream zip = new ZipInputStream(new FileInputStream(file.toFile()));
+      ZipInputStream zip = new ZipInputStream(is);
       zip.getNextEntry();
       return new InputStreamReader(zip, StandardCharsets.UTF_8);
     }
-    return Files.newBufferedReader(file, StandardCharsets.UTF_8);
+    return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
   }
 }

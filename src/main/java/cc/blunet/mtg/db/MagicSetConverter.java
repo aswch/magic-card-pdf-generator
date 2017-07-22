@@ -1,6 +1,6 @@
 package cc.blunet.mtg.db;
 
-import static cc.blunet.common.io.data.JacksonUtils.stream;
+import static cc.blunet.common.io.serialization.JacksonUtils.stream;
 import static com.google.common.collect.ImmutableMultiset.toImmutableMultiset;
 
 import java.time.LocalDate;

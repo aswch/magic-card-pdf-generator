@@ -1,6 +1,8 @@
 package cc.blunet.common;
 
-public class Unchecked {
+public final class Unchecked {
+  private Unchecked() {}
+
   public static void rethrow(final Throwable checkedException) {
     Unchecked.<RuntimeException>thrownInsteadOf(checkedException);
   }

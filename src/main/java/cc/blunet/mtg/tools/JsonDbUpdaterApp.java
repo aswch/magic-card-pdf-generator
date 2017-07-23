@@ -48,16 +48,25 @@ public class JsonDbUpdaterApp {
     json.forEach(set -> {
       // discard unnecessary information
       set.remove("translations");
+
+      String code = (String) set.get("code");
+      // fix code of Ugin's Fate promos
+      if (code.equals("FRF_UGIN")) {
+        set.put("code", "pUGF");
+      }
+
       ((List<Map<String, Object>>) set.get("cards")).forEach(card -> {
         // discard unnecessary information
         card.remove("foreignNames");
+
         String name = (String) card.get("name");
+        // fix layout of meld tokens
         if (tokenCards.contains(name)) {
           card.put("layout", "token");
         }
       });
     });
-    // TODO add challenge decks (DC1,CD2,CD3)
+    // TODO add challenge decks (CD1,CD2,CD3)
 
     // write
     Path out = Paths2.of(JsonDbUpdaterApp.class, "/").resolve("AllSetsArray-x.json");

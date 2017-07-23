@@ -1,6 +1,7 @@
 package cc.blunet.mtg.db;
 
 import static cc.blunet.common.io.serialization.JacksonUtils.stream;
+import static cc.blunet.common.util.Logging.toStringSupplier;
 import static java.util.stream.Collectors.joining;
 
 import java.util.Map;
@@ -82,10 +83,10 @@ class CardConverter extends StdConverter<JsonNode, Card> {
 
   private void check(boolean condition, String layout, JsonNode names) {
     if (!condition && names != null) {
-      LOG.warn("layout: {} {}", layout, "['" + stream(names) //
+      LOG.warn("layout: {} {}", layout, toStringSupplier(() -> //
+      "['" + stream(names) //
           .map(JsonNode::asText) //
-          .collect(joining("','")) + "']");
+          .collect(joining("','")) + "']"));
     }
-
   }
 }

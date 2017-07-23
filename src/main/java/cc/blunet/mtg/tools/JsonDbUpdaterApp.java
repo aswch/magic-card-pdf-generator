@@ -47,6 +47,7 @@ public class JsonDbUpdaterApp {
 
     // discard unnecessary information (shaves 1/4 off the compressed size)
     json.forEach(set -> {
+      set.remove("translations");
       ((List<Map<String, Object>>) set.get("cards")).forEach(card -> {
         card.remove("foreignNames");
         String name = (String) card.get("name");

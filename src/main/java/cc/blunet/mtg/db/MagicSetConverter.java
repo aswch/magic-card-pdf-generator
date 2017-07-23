@@ -1,6 +1,7 @@
 package cc.blunet.mtg.db;
 
 import static cc.blunet.common.io.serialization.JacksonUtils.stream;
+import static cc.blunet.common.util.Collections2.set;
 import static com.google.common.collect.ImmutableMultiset.toImmutableMultiset;
 
 import java.time.LocalDate;
@@ -9,7 +10,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.StdConverter;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 
 import cc.blunet.mtg.core.Card;
@@ -35,17 +35,22 @@ class MagicSetConverter extends StdConverter<JsonNode, MagicSet> {
   }
 
   private MagicSetType type(String type) {
-    if (type.equals("core") || type.equals("un")) {
+    if (type.equals("core")) {
       return MagicSetType.CORE;
     } else if (type.equals("expansion")) {
       return MagicSetType.EXPANSION;
-    } else if (type.equals("reprint") || type.equals("from the vault")) {
+    } else if (set("reprint", "from the vault", "masters", "masterpiece").contains(type)) {
       return MagicSetType.REPRINT;
-    } else if (ImmutableSet.of("premium deck", "duel deck", "box", "commander", //
-        "planechase", "archenemy", "conspiracy").contains(type)) {
-      return MagicSetType.DECK;
+    } else if (set("duel deck", "premium deck", "box").contains(type)) {
+      return MagicSetType.DECK; // regular magic decks
+    } else if (set("archenemy", "commander", "planechase").contains(type)) {
+      return MagicSetType.DECK; // special format decks
     }
-    // "starter", ,"promo", "vanguard", "masters", "masterpiece"
+    // "conspiracy" // multiplayer booster draft
+    // "vanguard" // special vanguard-format cards only
+    // "un" : sets (UNH, UGL) of non-legal cards
+    // "starter" : ?
+    // "promo" : ?
     return MagicSetType.OTHER;
   }
 }

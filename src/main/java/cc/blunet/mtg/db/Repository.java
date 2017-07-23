@@ -1,23 +1,25 @@
 package cc.blunet.mtg.db;
 
 import static cc.blunet.common.io.serialization.JacksonUtils.readJsonValue;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.function.Predicate;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Multimap;
@@ -39,6 +41,16 @@ public final class Repository {
   private SetMultimap<Card, MagicSet> cards = null;
   private Set<MagicSet> sets = null;
 
+  private final Collection<Predicate<MagicSet>> filters;
+
+  public Repository() {
+    this(ImmutableList.of());
+  }
+
+  public Repository(Collection<Predicate<MagicSet>> filters) {
+    this.filters = checkNotNull(filters);
+  }
+
   public Optional<Card> readCard(String name) {
     return cards().keySet().stream()//
         .filter(c -> c.name().equals(name) //
@@ -48,14 +60,14 @@ public final class Repository {
 
   public Multimap<Card, MagicSet> cards() {
     if (cards == null) {
-      cards = loadCards(sets());
+      cards = loadCards();
     }
     return cards;
   }
 
-  private static SetMultimap<Card, MagicSet> loadCards(Set<MagicSet> sets) {
+  private SetMultimap<Card, MagicSet> loadCards() {
     ImmutableSetMultimap.Builder<Card, MagicSet> result = ImmutableSetMultimap.builder();
-    for (MagicSet set : sets) {
+    for (MagicSet set : sets()) {
       for (Card card : set.cards()) {
         result.put(card, set);
       }
@@ -81,11 +93,10 @@ public final class Repository {
     return sets;
   }
 
-  private static Set<MagicSet> loadSets() {
-    List<MagicSet> sets = readJsonValue(dataSource(), objectMapper(), new TypeReference<List<MagicSet>>() {});
-
-    return sets.stream() //
-        .filter(s -> !s.id().startsWith("p") && !s.id().equals("FRF_UGIN")) //
+  private Set<MagicSet> loadSets() {
+    return readJsonValue(dataSource(), objectMapper(), new TypeReference<List<MagicSet>>() {}) //
+        .stream() //
+        .filter(filters.stream().reduce(Predicate::or).orElse(t -> true)) //
         .collect(toImmutableSet());
   }
 
@@ -97,7 +108,7 @@ public final class Repository {
     return mapper;
   }
 
-  private static Path dataSource() {
+  public static Path dataSource() {
     try {
       return Paths.get(Repository.class.getResource("/AllSetsArray-x.json.zip").toURI());
     } catch (URISyntaxException ex) {

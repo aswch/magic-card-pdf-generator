@@ -50,10 +50,12 @@ public class AdvDeckFactory {
 
   private List<String> readDeckFile(Path path) throws IOException {
     return Files.readAllLines(path, Charsets.UTF_8).stream() //
-        .filter(line -> !line.startsWith("by ")) //
-        .map(StringEscapeUtils::unescapeHtml4) // handle tappedout.net md files
         .map(line -> basicMd.matcher(line).replaceFirst("")) // remove basic markdown
         .map(line -> linkMd.matcher(line).replaceFirst("$1")) // remove markdown links
+        .map(StringEscapeUtils::unescapeHtml4) // handle tappedout.net md files
+        .map(String::trim) //
+        .filter(line -> !line.startsWith("by ")) //
+        .filter(line -> !line.isEmpty()) // remove empty lines
         .collect(toList());
   }
 

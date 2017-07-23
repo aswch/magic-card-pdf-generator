@@ -1,16 +1,15 @@
 package cc.blunet.mtg.core;
 
+import static cc.blunet.common.util.Collections2.set;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.regex.Pattern.CASE_INSENSITIVE;
 import static org.apache.commons.lang3.StringUtils.substring;
-import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.ImmutableSet;
 
 import cc.blunet.mtg.core.PrintedDeck.PrintedCard;
 import cc.blunet.mtg.db.Repository;
@@ -34,9 +32,11 @@ public final class DeckFactory {
 
   private static final Logger LOG = LoggerFactory.getLogger(DeckFactory.class);
 
-  private static final Pattern section = Pattern.compile("^$|^(Mainboard|Sorcer(y|ies)|(Commander|Instant|" //
-      + "|Planeswalker|Creature|Enchantment|Artifact|Land)s?)(\\s+\\(\\d+\\))?$", CASE_INSENSITIVE);
   private static final Pattern deckLine = Pattern.compile("^(\\w[^\\[\\{]+(\\[\\w{3}\\])?)( \\{\\w+\\})?$");
+  private static final Pattern mainboardLine = Pattern.compile("^mainboard$", CASE_INSENSITIVE);
+  private static final Pattern sideboardLine = Pattern.compile("^sideboard$", CASE_INSENSITIVE);
+  private static final Pattern sectionLine = Pattern.compile("^(Sorcer(y|ies)|(Commander|Instant|" //
+      + "|Planeswalker|Creature|Enchantment|Artifact|Land)s?)(\\s+\\(\\d+\\))?$", CASE_INSENSITIVE);
   private static final Pattern cardLine = Pattern.compile("^(\\d+)x?\\s+([^\\[]+)(\\s+\\[(\\w{3})(\\d+)?\\])?$");
 
   private final Repository db;
@@ -45,72 +45,99 @@ public final class DeckFactory {
     this.db = checkNotNull(db);
   }
 
-  // deck separator: -+
-  // cards: lines starting with a digit are
+  // deck title: first line matching \w[^\[{]+
+  // cards: lines starting with a digit
   // sections: ((Mainboard|Commander|Instant|Creature|Enchantment|Artifact|Land)s?|Sorcer(y|ies))(\s+\(\d+\))?
-  // deck title: \w[^\[{]+
   public PrintedDeck createFrom(List<String> lines, String defaultName) {
-    final AtomicReference<String> name = new AtomicReference<>(defaultName);
-    final AtomicReference<Optional<MagicSet>> defaultSet = new AtomicReference<>(Optional.empty());
 
-    ImmutableMultiset.Builder<PrintedCard> cards = ImmutableMultiset.builder();
+    String name = defaultName;
+    Optional<String> defaultSet = Optional.empty();
+
+    ImmutableMultiset.Builder<PrintedCard> mainboard = ImmutableMultiset.builder();
+    ImmutableMultiset.Builder<PrintedCard> sideboard = ImmutableMultiset.builder();
+    ImmutableMultiset.Builder<PrintedCard> board = mainboard; // start with main
     for (String line : lines) {
-      line = line.trim(); // remove leading & trailing spaces
       Matcher matcher = cardLine.matcher(line);
       if (matcher.find()) {
         int count = Integer.parseInt(matcher.group(1));
-        String cardName = matcher.group(2).trim() //
-            .replace("Æ", "Ae") // canonical naming is "Ae"
-            .replace("//", "/") // canonical naming is "/"
-            .replaceFirst("(\\w)/(\\w)", "$1 / $2"); // canonical naming for split cards
-        Optional<Card> card = db.readCard(cardName);
+        String cardName = matcher.group(2).trim();
+        Optional<Card> card = readCard(cardName);
         if (card.isPresent()) {
-          PrintedCard pCard = printedCard(card.get(), matcher.group(4), matcher.group(5), defaultSet.get());
-          cards.addAll(Collections.nCopies(count, pCard));
+          PrintedCard pCard = printedCard(card.get(), matcher.group(4), matcher.group(5), defaultSet);
+          board.addAll(Collections.nCopies(count, pCard));
         } else {
           LOG.warn("Omitting unknown card: {}", cardName);
         }
       } else {
-        matcher = section.matcher(line);
+        matcher = sectionLine.matcher(line);
         if (matcher.find()) {
           // eat line
         } else {
-          // TODO cleanup: match title only on first line
-          matcher = deckLine.matcher(line);
+          matcher = deckLine.matcher(lines.get(0));
           if (matcher.find()) {
-            Optional.ofNullable(trimToNull(matcher.group(1))).ifPresent(name::set);
-            defaultSet.set(Optional.ofNullable(matcher.group(2)) //
-                .flatMap(s -> db.readSet(substring(s, 1, -1))));
+            name = matcher.group(1).trim();
+            defaultSet = Optional.ofNullable(substring(matcher.group(2), 1, -1));
+          } else if (mainboardLine.matcher(line).find()) {
+            board = mainboard;
+          } else if (sideboardLine.matcher(line).find()) {
+            board = sideboard;
           } else {
-            // FIXME handle Sideboard/Mainboard...
-            LOG.info("Omitting non-matching line: {}", line);
+            LOG.info("Omitting unrecognized line: {}", line);
           }
         }
       }
     }
-    return new PrintedDeck(name.get(), cards.build());
+    return new PrintedDeck(name, mainboard.build(), sideboard.build());
   }
 
-  private PrintedCard printedCard(Card card, @Nullable String set, @Nullable String var, Optional<MagicSet> defaultSet) {
-    Set<String> lands = ImmutableSet.of("Forest", "Island", "Mountain", "Plains", "Swamp");
+  private Optional<Card> readCard(String name) {
+    String cardName = name //
+        .replace("Æ", "Ae") // canonical naming is "Ae"
+        .replace("//", "/") // canonical naming is "/"
+        .replaceFirst("(\\w)/(\\w)", "$1 / $2"); // canonical naming for split cards
+    return db.readCard(cardName);
+  }
 
+  private PrintedCard printedCard(Card card, @Nullable String set, @Nullable String var, Optional<String> defaultSet) {
     MagicSet magicSet = Optional.ofNullable(set) //
         .flatMap(db::readSet) //
         .orElseGet(() -> defaultSet //
-            .orElseGet(() -> lands.contains(card.name()) //
-                // defaults to zendikar set for lands
-                ? db.readSet("ZEN").get() //
-                : db.sets(card).last()));
+            .flatMap(db::readSet) //
+            .orElseGet(defaultSet(card)));
 
     int variation = Optional.ofNullable(var) //
         .map(Integer::parseUnsignedInt) //
         .map(num -> num - 1) //
-        .orElse(0);
+        .orElseGet(defaultVariation(card));
 
     int variants = magicSet.cards().count(card);
     checkState(variants > 0, "Card '%s' not in Set '%s'", card, magicSet);
     checkState(variation < variants, "Only %s variants of '%s' in '%s'", variants, card, magicSet);
 
     return new PrintedCard(card, magicSet, variation);
+  }
+
+  private Supplier<MagicSet> defaultSet(Card card) {
+    return () -> {
+      if (set("Wastes").contains(card.name())) {
+        return db.readSet("OGW").get();
+      }
+      if (set("Forest", "Island", "Mountain", "Plains", "Swamp").contains(card.name())) {
+        return db.readSet("ZEN").get();
+      }
+      return db.sets(card).last();
+    };
+  }
+
+  private Supplier<Integer> defaultVariation(Card card) {
+    return () -> {
+      if (set("Wastes").contains(card.name())) {
+        return 1;
+      }
+      if (set("Forest", "Island", "Mountain", "Plains", "Swamp").contains(card.name())) {
+        return 5;
+      }
+      return 0;
+    };
   }
 }

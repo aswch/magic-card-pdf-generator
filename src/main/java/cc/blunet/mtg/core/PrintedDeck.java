@@ -14,26 +14,41 @@ import cc.blunet.common.ValueObject;
 
 public final class PrintedDeck extends BaseEntity<String> {
 
-  private final Multiset<PrintedCard> cards;
+  private final Multiset<PrintedCard> mainboard;
+  private final Multiset<PrintedCard> sideboard;
+  // private final Multiset<PrintedCard> tokens;
 
   public PrintedDeck(String name, Multiset<PrintedCard> cards) {
+    this(name, cards, ImmutableMultiset.of());
+  }
+
+  public PrintedDeck(String name, Multiset<PrintedCard> mainboard, Multiset<PrintedCard> sideboard) {
     super(name);
-    this.cards = ImmutableMultiset.copyOf(checkNotNull(cards));
-    checkArgument(!cards.isEmpty());
+    this.mainboard = ImmutableMultiset.copyOf(checkNotNull(mainboard));
+    this.sideboard = ImmutableMultiset.copyOf(checkNotNull(sideboard));
+    checkArgument(!mainboard.isEmpty());
   }
 
   public String name() {
     return id();
   }
 
+  public Multiset<PrintedCard> mainboard() {
+    return mainboard;
+  }
+
+  public Multiset<PrintedCard> sideboard() {
+    return sideboard;
+  }
+
   public Multiset<PrintedCard> cards() {
-    return cards;
+    return ImmutableMultiset.<PrintedCard>builder().addAll(mainboard).addAll(sideboard).build();
   }
 
   public Deck asDeck() {
-    return new Deck(name(), cards.stream() //
-        .map(PrintedCard::card) //
-        .collect(toImmutableMultiset()));
+    return new Deck(name(), //
+        mainboard.stream().map(PrintedCard::card).collect(toImmutableMultiset()), //
+        sideboard.stream().map(PrintedCard::card).collect(toImmutableMultiset()));
   }
 
   public static final class PrintedCard extends ValueObject {

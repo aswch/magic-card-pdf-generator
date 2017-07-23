@@ -1,5 +1,6 @@
 package cc.blunet.mtg.tools;
 
+import static cc.blunet.common.util.Collections2.set;
 import static cc.blunet.common.util.Paths2.fileName;
 import static cc.blunet.common.util.Paths2.stripFileSuffix;
 import static cc.blunet.mtg.core.MagicSetType.CORE;
@@ -17,7 +18,6 @@ import java.util.function.BiPredicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.ImmutableSet;
 
 import cc.blunet.common.io.compression.ZipArchive;
 import cc.blunet.mtg.core.MagicSet;
@@ -37,7 +37,9 @@ public class ImageSetExtractorApp {
     Path source = Paths.get("/", "Users", "bernstein", "XLHQ-Sets-Torrent");
     Path target = source.resolve("_all");
 
-    Set<Path> zips = Files.find(source, 1, mtgSetFileFilter(CORE, EXPANSION, DECK)) //
+    Repository repo = new Repository();
+
+    Set<Path> zips = Files.find(source, 1, mtgSetFileFilter(repo, set(CORE, EXPANSION, DECK))) //
         .collect(toImmutableSet());
 
     for (Path file : zips) {
@@ -60,9 +62,9 @@ public class ImageSetExtractorApp {
     }
   }
 
-  private static BiPredicate<Path, BasicFileAttributes> mtgSetFileFilter(MagicSetType... types) {
-    Set<String> sets = new Repository().sets().stream() //
-        .filter(s -> ImmutableSet.copyOf(types).contains(s.type())) //
+  private static BiPredicate<Path, BasicFileAttributes> mtgSetFileFilter(Repository repo, Set<MagicSetType> types) {
+    Set<String> sets = repo.sets().stream() //
+        .filter(s -> types.contains(s.type())) //
         .map(MagicSet::id) //
         .collect(toImmutableSet());
 

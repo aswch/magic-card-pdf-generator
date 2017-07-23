@@ -160,11 +160,13 @@ public class PdfCreatorApp {
         }
         page.put(deck, card);
 
+        // FIXME print tokens & emblems
         if (card.card() instanceof DoubleFacedCard) {
           if (counter++ % 9 == 0) {
             page = LinkedListMultimap.create();
             result.add(page);
           }
+          // FIXME print placeholder for doublesided cards
           page.put(deck, new PrintedCard(((DoubleFacedCard) card.card()).back(), card.edition(), card.variation()));
         }
       }

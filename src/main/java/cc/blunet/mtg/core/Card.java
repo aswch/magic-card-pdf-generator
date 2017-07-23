@@ -140,7 +140,6 @@ public abstract class Card extends BaseEntity<String> {
     }
   }
 
-  // FIXME link tokens to cards, get db of tokens...
   /**
    * Tokens are not in the deck or sideboard.
    */

@@ -21,30 +21,37 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
 
+import cc.blunet.common.util.Files2;
+
 public final class ZipArchive {
 
   private ZipArchive() {}
 
   private static final Logger LOG = LoggerFactory.getLogger(ZipArchive.class);
 
-  public static void extract(Path file, UnaryOperator<Path> fileMapper) {
-    LOG.info("Extracting Archive: {}", file);
+  public static void extract(Path path, UnaryOperator<Path> fileMapper) {
+    LOG.info("Extracting Archive: {}", path);
 
-    try (ZipInputStream zip = new ZipInputStream(new FileInputStream(file.toFile()))) {
+    try (ZipInputStream zip = new ZipInputStream(new FileInputStream(path.toFile()))) {
 
       ZipEntry entry = zip.getNextEntry();
       while (entry != null) {
         if (!entry.isDirectory()) {
-          Path filePath = Paths.get(entry.getName());
-          File path = fileMapper.apply(filePath).toFile();
+          Path oldPath = Paths.get(entry.getName());
+          Path newPath = fileMapper.apply(oldPath);
+          File file = newPath.toFile();
 
-          LOG.debug("Extracting {} to {}", filePath, path);
+          if (!file.exists() || Files2.crc32(newPath) != entry.getCrc()) {
 
-          if (!path.getParentFile().exists()) {
-            path.getParentFile().mkdirs();
-          }
-          try (FileOutputStream fos = new FileOutputStream(path)) {
-            ByteStreams.copy(zip, fos);
+            if (!file.getParentFile().exists()) {
+              file.getParentFile().mkdirs();
+            }
+            LOG.debug("Extracting {} to {}", oldPath, newPath);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+              ByteStreams.copy(zip, fos);
+            }
+          } else {
+            LOG.debug("Skipping {} to {} because it exists.", oldPath, newPath);
           }
         }
         entry = zip.getNextEntry();
@@ -52,7 +59,7 @@ public final class ZipArchive {
       LOG.debug("Extraction successfully finished.");
 
     } catch (IOException ex) {
-      LOG.error("Could not extract " + file + ".", ex);
+      LOG.error("Could not extract " + path + ".", ex);
     }
   }
 

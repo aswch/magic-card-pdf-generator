@@ -96,7 +96,7 @@ public final class Repository {
   private Set<MagicSet> loadSets() {
     return readJsonValue(dataSource(), objectMapper(), new TypeReference<List<MagicSet>>() {}) //
         .stream() //
-        .filter(filters.stream().reduce(Predicate::or).orElse(t -> true)) //
+        .filter(filters.stream().reduce(Predicate::and).orElse(t -> false)) //
         .collect(toImmutableSet());
   }
 

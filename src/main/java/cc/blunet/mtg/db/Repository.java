@@ -28,7 +28,7 @@ import com.google.common.collect.SetMultimap;
 
 import cc.blunet.common.Unchecked;
 import cc.blunet.mtg.core.Card;
-import cc.blunet.mtg.core.Card.DoubleFacedCard;
+import cc.blunet.mtg.core.Card.MultiCard;
 import cc.blunet.mtg.core.MagicSet;
 
 /**
@@ -53,8 +53,9 @@ public final class Repository {
 
   public Optional<Card> readCard(String name) {
     return cards().keySet().stream()//
-        .filter(c -> c.name().equals(name) //
-            || (c instanceof DoubleFacedCard && ((DoubleFacedCard) c).back().name().equals(name))) //
+        .filter(c -> c.id().equals(name) //
+            || (c instanceof MultiCard //
+                && ((MultiCard) c).cards().stream().anyMatch(cc -> cc.name().equals(name)))) //
         .findFirst();
   }
 

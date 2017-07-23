@@ -67,6 +67,7 @@ class CardConverter extends StdConverter<JsonNode, Card> {
       return new SimpleCard(name);
     }
     if ("token".equals(layout)) {
+      // FIXME link tokens to cards, get db of tokens...
       // see https://github.com/mtgjson/mtgjson4
       return new TokenCard(name);
     }

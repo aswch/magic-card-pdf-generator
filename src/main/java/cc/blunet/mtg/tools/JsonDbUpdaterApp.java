@@ -45,10 +45,11 @@ public class JsonDbUpdaterApp {
     // create object graph
     List<Map<String, Object>> json = new ObjectMapper().readValue(data, List.class);
 
-    // discard unnecessary information (shaves 1/4 off the compressed size)
     json.forEach(set -> {
+      // discard unnecessary information
       set.remove("translations");
       ((List<Map<String, Object>>) set.get("cards")).forEach(card -> {
+        // discard unnecessary information
         card.remove("foreignNames");
         String name = (String) card.get("name");
         if (tokenCards.contains(name)) {
@@ -56,6 +57,7 @@ public class JsonDbUpdaterApp {
         }
       });
     });
+    // TODO add challenge decks (DC1,CD2,CD3)
 
     // write
     Path out = Paths2.of(JsonDbUpdaterApp.class, "/").resolve("AllSetsArray-x.json");

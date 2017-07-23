@@ -131,9 +131,9 @@ public class PdfCreatorApp {
   }
 
   private String imageName(PrintedCard card) {
-    String name = StringUtils.stripAccents(card.card().name() //
+    String name = StringUtils.stripAccents(card.card().name()) //
         .replace("/", "-") //
-        .replace("\"", ""));
+        .replace("\"", "");
 
     // when more than 1 variants, add 1 (start with 1)
     int variant = card.edition().cards().count(card.card()) > 1 //
@@ -151,7 +151,7 @@ public class PdfCreatorApp {
     int counter = 0;
     for (PrintedDeck deck : decks) {
       for (PrintedCard card : deck.cards()) {
-        if (collection.isPresent() && collection.get().cards().contains(card)) {
+        if (collection.isPresent() && collection.get().asDeck().cards().contains(card.card())) {
           continue;
         }
         if (counter++ % 9 == 0) {

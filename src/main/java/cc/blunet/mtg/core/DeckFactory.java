@@ -9,7 +9,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -99,45 +99,48 @@ public final class DeckFactory {
   }
 
   private PrintedCard printedCard(Card card, @Nullable String set, @Nullable String var, Optional<String> defaultSet) {
+    final AtomicBoolean isDefault = new AtomicBoolean(false);
+
     MagicSet magicSet = Optional.ofNullable(set) //
         .flatMap(db::readSet) //
         .orElseGet(() -> defaultSet //
             .flatMap(db::readSet) //
-            .orElseGet(defaultSet(card)));
+            .orElseGet(() -> {
+              isDefault.set(true);
+              return defaultSet(card);
+            }));
 
     int variation = Optional.ofNullable(var) //
         .map(Integer::parseUnsignedInt) //
         .map(num -> num - 1) //
-        .orElseGet(defaultVariation(card));
+        .orElseGet(() -> defaultVariation(card, isDefault.get()));
 
     int variants = magicSet.cards().count(card);
     checkState(variants > 0, "Card '%s' not in Set '%s'", card, magicSet);
-    checkState(variation < variants, "Only %s variants of '%s' in '%s'", variants, card, magicSet);
+    checkState(variation < variants, "Only %s variants (not %s) of '%s' in '%s'", variants, variation, card, magicSet);
 
     return new PrintedCard(card, magicSet, variation);
   }
 
-  private Supplier<MagicSet> defaultSet(Card card) {
-    return () -> {
-      if (set("Wastes").contains(card.name())) {
-        return db.readSet("OGW").get();
-      }
-      if (set("Forest", "Island", "Mountain", "Plains", "Swamp").contains(card.name())) {
-        return db.readSet("ZEN").get();
-      }
-      return db.sets(card).last();
-    };
+  private MagicSet defaultSet(Card card) {
+    if (set("Wastes").contains(card.name())) {
+      return db.readSet("OGW").get();
+    }
+    if (set("Forest", "Island", "Mountain", "Plains", "Swamp").contains(card.name())) {
+      return db.readSet("ZEN").get();
+    }
+    return db.sets(card).last();
   }
 
-  private Supplier<Integer> defaultVariation(Card card) {
-    return () -> {
+  private Integer defaultVariation(Card card, boolean isDefault) {
+    if (isDefault) {
       if (set("Wastes").contains(card.name())) {
         return 1;
       }
       if (set("Forest", "Island", "Mountain", "Plains", "Swamp").contains(card.name())) {
         return 5;
       }
-      return 0;
-    };
+    }
+    return 0;
   }
 }

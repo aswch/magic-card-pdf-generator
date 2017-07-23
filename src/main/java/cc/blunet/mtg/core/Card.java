@@ -31,19 +31,19 @@ public abstract class Card extends BaseEntity<String> {
   }
 
   public abstract static class MultiCard extends Card {
-    protected final List<Card> cards;
+    protected final List<SimpleCard> cards;
 
-    public MultiCard(Card... cards) {
+    public MultiCard(SimpleCard... cards) {
       this(Stream.of(cards).distinct().collect(toImmutableList()));
       checkState(cards.length == this.cards.size());
     }
 
-    private MultiCard(List<Card> cards) {
+    private MultiCard(List<SimpleCard> cards) {
       super(cards.stream().map(Card::name).collect(joining(" / ")));
       this.cards = checkNotNull(cards);
     }
 
-    public Set<Card> cards() {
+    public Set<SimpleCard> cards() {
       return ImmutableSet.copyOf(cards);
     }
   }
@@ -53,13 +53,12 @@ public abstract class Card extends BaseEntity<String> {
    */
   public static final class DoubleFacedCard extends MultiCard {
 
-    public DoubleFacedCard(Card front, Card back) {
+    public DoubleFacedCard(SimpleCard front, SimpleCard back) {
       super(front, back);
     }
 
-    @Override
-    public String name() {
-      return cards.get(0).name();
+    public Card front() {
+      return cards.get(0);
     }
 
     public Card back() {
@@ -72,16 +71,15 @@ public abstract class Card extends BaseEntity<String> {
    */
   public static final class FlipCard extends MultiCard {
 
-    public FlipCard(Card top, Card bottom) {
+    public FlipCard(SimpleCard top, SimpleCard bottom) {
       super(top, bottom);
     }
 
-    @Override
-    public String name() {
-      return cards.get(0).name();
+    public SimpleCard top() {
+      return cards.get(0);
     }
 
-    public Card bottom() {
+    public SimpleCard bottom() {
       return cards.get(1);
     }
   }
@@ -91,19 +89,19 @@ public abstract class Card extends BaseEntity<String> {
    */
   public static final class SplitCard extends MultiCard {
 
-    public SplitCard(Card left, Card right) {
+    public SplitCard(SimpleCard left, SimpleCard right) {
       super(left, right);
     }
 
-    public SplitCard(Card... cards) {
+    public SplitCard(SimpleCard... cards) {
       super(cards);
     }
 
-    public Card left() {
+    public SimpleCard left() {
       return cards.get(0);
     }
 
-    public Card right() {
+    public SimpleCard right() {
       return cards.get(1);
     }
   }
@@ -113,15 +111,15 @@ public abstract class Card extends BaseEntity<String> {
    */
   public static final class AftermathCard extends MultiCard {
 
-    public AftermathCard(Card left, Card right) {
+    public AftermathCard(SimpleCard left, SimpleCard right) {
       super(left, right);
     }
 
-    public Card top() {
+    public SimpleCard top() {
       return cards.get(0);
     }
 
-    public Card bottom() {
+    public SimpleCard bottom() {
       return cards.get(1);
     }
   }

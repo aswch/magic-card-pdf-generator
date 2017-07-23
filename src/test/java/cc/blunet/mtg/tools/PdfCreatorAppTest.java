@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Set;
 
 import cc.blunet.mtg.core.AdvDeckFactory;
 import cc.blunet.mtg.core.DeckFactory;
@@ -21,8 +21,8 @@ public class PdfCreatorAppTest {
   public static void main(String[] args) throws URISyntaxException, IOException {
     // given
     Path root = Paths.get(PdfCreatorAppTest.class.getResource(".").toURI());
-    Collection<PrintedDeck> decks = deckFactory.createFrom(root.resolve("decklist.txt"));
-    Optional<PrintedDeck> collection = Optional.empty();
+    Set<PrintedDeck> decks = deckFactory.read(root.resolve("decklist.txt"));
+    Set<PrintedDeck> collection = Collections.emptySet();
     Path imagesPath = root;
     Path resultPath = root;
 

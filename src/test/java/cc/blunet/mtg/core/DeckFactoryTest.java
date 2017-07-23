@@ -26,7 +26,7 @@ public class DeckFactoryTest {
     Path md = Paths.get(DeckFactoryTest.class.getResource("Who's a Heretic Now.tappedout.md").toURI());
 
     // when
-    Collection<PrintedDeck> decks = deckFactory.createFrom(md);
+    Collection<PrintedDeck> decks = deckFactory.read(md);
 
     // then
     Assertions.assertTrue(decks.size() == 1);
@@ -39,7 +39,7 @@ public class DeckFactoryTest {
     Path dda = root.resolve("DDA - Elves vs. Goblins (2007).txt");
 
     // when
-    Collection<PrintedDeck> decks = deckFactory.createFrom(dda);
+    Collection<PrintedDeck> decks = deckFactory.read(dda);
 
     // then
     Assertions.assertTrue(decks.size() == 2);

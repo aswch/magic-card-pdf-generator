@@ -1,22 +1,15 @@
 package cc.blunet.mtg.tools;
 
-import static cc.blunet.common.util.Collections2.set;
 import static cc.blunet.common.util.Paths2.fileName;
 import static cc.blunet.common.util.Paths2.stripFileSuffix;
-import static cc.blunet.mtg.core.MagicSetType.CORE;
-import static cc.blunet.mtg.core.MagicSetType.DECK;
-import static cc.blunet.mtg.core.MagicSetType.EXPANSION;
-import static cc.blunet.mtg.core.MagicSetType.REPRINT;
+import static cc.blunet.mtg.db.Repository.defaultFilters;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
-import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.substring;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Set;
-import java.util.function.BiPredicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +20,8 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
 
 import cc.blunet.common.io.compression.ZipArchive;
+import cc.blunet.common.util.Collections2;
 import cc.blunet.mtg.core.MagicSet;
-import cc.blunet.mtg.core.MagicSetType;
 import cc.blunet.mtg.db.Repository;
 
 /**
@@ -46,25 +39,24 @@ public class ImageSetExtractorApp {
     Path source = Paths.get("/", "Users", "bernstein", "XLHQ-Sets-Torrent");
     Path target = source.resolve("_all");
 
-    Repository repo = new Repository();
+    Repository repo = new Repository(Collections2.concat(defaultFilters(), s -> true /* your filter */));
 
     // find all set zips
     Pattern setZip = Pattern.compile("^\\w+.zip$");
     Set<String> images = Files.find(source, 1, (p, bfa) -> setZip.matcher(fileName(p)).matches()) //
-        .map(p -> substring(fileName(p), 0, -4)) //
-        .collect(toSet());
-    Set<String> sets = repo.sets().stream().map(MagicSet::id).collect(toSet());
-
-    SetView<String> noImagesForSet = Sets.difference(sets, images);
-    LOG.info("No images for sets : {}", noImagesForSet);
-    SetView<String> noSetForImages = Sets.difference(images, sets);
-    LOG.info("No set for images : {}", noSetForImages);
-
-    Set<Path> zips = Files.find(source, 1, mtgSetFileFilter(repo, set(CORE, EXPANSION, REPRINT, DECK))) //
+        .map(p -> mtgSetCode(p)) //
         .collect(toImmutableSet());
+    Set<String> sets = repo.sets().stream().map(MagicSet::id).collect(toImmutableSet());
 
-    for (Path file : zips) {
-      final String code = mtgSetCode(file);
+    SetView<String> matching = Sets.intersection(images, sets);
+    LOG.info("Extracting : {}", matching);
+    SetView<String> noImagesForSet = Sets.difference(sets, images);
+    LOG.info("No images found for sets : {}", noImagesForSet);
+    SetView<String> noSetForImages = Sets.difference(images, sets);
+    LOG.info("No set found for images : {}", noSetForImages);
+
+    matching.stream().sorted().forEach(code -> {
+      Path file = source.resolve(code + ".zip");
 
       ZipArchive.extract(file, path -> {
         String fileName = fileName(path);
@@ -80,16 +72,8 @@ public class ImageSetExtractorApp {
         }
         return target.resolve(fileName);
       });
-    }
-  }
 
-  private static BiPredicate<Path, BasicFileAttributes> mtgSetFileFilter(Repository repo, Set<MagicSetType> types) {
-    Set<String> sets = repo.sets().stream() //
-        .filter(s -> types.contains(s.type())) //
-        .map(MagicSet::id) //
-        .collect(toImmutableSet());
-
-    return (path, bfa) -> fileName(path).endsWith(".zip") && sets.contains(mtgSetCode(path));
+    });
   }
 
   private static String mtgSetCode(Path path) {

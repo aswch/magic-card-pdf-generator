@@ -24,7 +24,7 @@
 		<maven.war.plugin.version>3.0.0</maven.war.plugin.version>
 		<maven.surefire.plugin.version>2.20</maven.surefire.plugin.version>
 		<maven.revision.plugin.version>1.4</maven.revision.plugin.version>
-		
+
 		<!-- Plugin Config -->
 		<java.source.version>1.8</java.source.version>
 		<java.target.version>1.8</java.target.version>
@@ -32,12 +32,12 @@
 		<project.build.sourceEncoding>${file.encoding}</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>${file.encoding}</project.reporting.outputEncoding>
 	</properties>
-	
+
 	<dependencies>
 		<!-- pdf -->
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
-			<artifactId>pdfbox</artifactId>
+			<artifactId>pdfbox</artifactId><!-- : fontbox,commons-logging -->
 			<version>2.0.5</version>
 		</dependency>
 
@@ -45,6 +45,16 @@
 		<dependency><!-- includes dataformat json -->
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency><!-- faster de-/serialization -->
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-afterburner</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency><!-- materialization of interfaces -->
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-mrbean</artifactId><!-- : asm -->
 			<version>${jackson.version}</version>
 		</dependency>
 
@@ -62,23 +72,11 @@
 		</dependency>
 
 		<!-- ### CORE ### -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.16.16</version>
-			<scope>provided</scope>
-		</dependency>
 		<!-- @NonNull, ... -->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
 			<version>3.0.2</version>
-		</dependency>
-		<!-- proper access to native libraries -->
-		<dependency>
-				<groupId>net.java.dev.jna</groupId>
-				<artifactId>jna</artifactId>
-				<version>4.4.0</version>
 		</dependency>
 
 		<!-- ### LOGGING ### -->
@@ -93,7 +91,7 @@
 			<version>1.2.3</version>
 		</dependency>
 
-		<!-- ## Testing ## -->
+		<!-- ### Testing ### -->
 		<!-- TODO requires eclipse 4.7.1 (oxygen) -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -105,12 +103,6 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${h2.version}</version>
 			<scope>test</scope>
 		</dependency>
 

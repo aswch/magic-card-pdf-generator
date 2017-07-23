@@ -25,7 +25,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDelegatingDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Multimap;
@@ -50,10 +50,6 @@ public final class Repository {
   private Set<MagicSet> sets = null;
 
   private final Collection<Predicate<MagicSet>> filters;
-
-  public Repository() {
-    this(defaultFilters());
-  }
 
   public Repository(Collection<Predicate<MagicSet>> filters) {
     this.filters = checkNotNull(filters);
@@ -108,7 +104,8 @@ public final class Repository {
     if (LOG.isInfoEnabled()) {
       sets.stream() //
           .sorted(natural().onResultOf(MagicSet::releasedOn)) //
-          .forEach(s -> LOG.info("{} [{}] {}{}", s.releasedOn(), s.id(), s.name(), predicate.test(s) ? "" : " (filtered)"));
+          .forEach(s -> LOG.info("{} [{}] {}{}", s.releasedOn(), s.id(), s.name(), //
+              predicate.test(s) ? "" : " (filtered)"));
     }
     return sets //
         .stream() //
@@ -118,7 +115,8 @@ public final class Repository {
 
   private static ObjectMapper objectMapper() {
     ObjectMapper mapper = new ObjectMapper();
-    SimpleModule module = new SimpleModule("cc.blunet.mtg.db", new Version(3, 10, 0, null, "com.mtgjson", "AllSetsArray-x"));
+    SimpleModule module = new SimpleModule("cc.blunet.mtg.db", //
+        new Version(3, 10, 0, null, "com.mtgjson", "AllSetsArray-x"));
     module.addDeserializer(MagicSet.class, new StdDelegatingDeserializer<>(new MagicSetConverter()));
     mapper.registerModule(module);
     return mapper;
@@ -136,11 +134,13 @@ public final class Repository {
   }
 
   public static Collection<Predicate<MagicSet>> defaultFilters() {
-    return ImmutableSet.of(//
+    return ImmutableList.of(//
         s -> !set("CED", "CEI").contains(s.id()), // no images (not tournament legal)
         s -> !set("MED", "ME2", "ME3", "ME4", "VMA", "TPR").contains(s.id()), // no images (online only)
         s -> !s.id().equals("MGB"), // no images (all cards also in visions)
         s -> s.releasedOn().isBefore(LocalDate.of(2017, 5, 1)) && !s.id().equals("DDS"), // no images yet
+        s -> !s.id().startsWith("p"), // no images/order (promos)
+        s -> !s.id().equals("MPS_AKH") // looks like shit
     );
   }
 }

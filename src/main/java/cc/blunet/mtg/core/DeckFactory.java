@@ -37,7 +37,7 @@ public final class DeckFactory {
   private static final Pattern sideboardLine = Pattern.compile("^sideboard$", CASE_INSENSITIVE);
   private static final Pattern sectionLine = Pattern.compile("^(Sorcer(y|ies)|(Commander|Instant|" //
       + "|Planeswalker|Creature|Enchantment|Artifact|Land)s?)(\\s+\\(\\d+\\))?$", CASE_INSENSITIVE);
-  private static final Pattern cardLine = Pattern.compile("^(\\d+)x?\\s+([^\\[]+)(\\s+\\[(\\w{3})(\\d+)?\\])?$");
+  private static final Pattern cardLine = Pattern.compile("^(\\d+)x?\\s+([^\\[]+)(\\s+\\[(\\w{3,})(\\d+)?\\])?$");
 
   private final Repository db;
 
@@ -101,6 +101,7 @@ public final class DeckFactory {
   private PrintedCard printedCard(Card card, @Nullable String set, @Nullable String var, Optional<String> defaultSet) {
     final AtomicBoolean isDefault = new AtomicBoolean(false);
 
+    // TODO support "custom" sets
     MagicSet magicSet = Optional.ofNullable(set) //
         .flatMap(db::readSet) //
         .orElseGet(() -> defaultSet //

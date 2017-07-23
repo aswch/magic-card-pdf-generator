@@ -1,5 +1,7 @@
 package cc.blunet.mtg.core;
 
+import static cc.blunet.mtg.db.Repository.defaultFilters;
+
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,7 +12,8 @@ import org.junit.jupiter.api.Assertions;
 import cc.blunet.mtg.db.Repository;
 
 public class DeckFactoryTest {
-  private static final AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(new Repository()));
+  private static final AdvDeckFactory deckFactory =
+      new AdvDeckFactory(new DeckFactory(new Repository(defaultFilters())));
 
   public static void main(String[] args) throws URISyntaxException {
     DeckFactoryTest test = new DeckFactoryTest();

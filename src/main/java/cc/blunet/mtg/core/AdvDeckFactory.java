@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -36,7 +37,14 @@ public class AdvDeckFactory {
     this.df = checkNotNull(df);
   }
 
-  public Set<PrintedDeck> createFrom(Path path) {
+  public Set<PrintedDeck> readAll(Path path, Predicate<String> fileFilter) throws IOException {
+    Predicate<String> filter = n -> (n.endsWith(".txt") || n.endsWith(".md"));
+    return Files.find(path, 99, (p, bfa) -> filter.and(fileFilter).test(fileName(p))) //
+        .flatMap(p -> read(p).stream()) //
+        .collect(toImmutableSet());
+  }
+
+  public Set<PrintedDeck> read(Path path) {
     try {
       String fileName = substring(fileName(path), 0, -4);
       return splitDecks(readDeckFile(path)).stream()//

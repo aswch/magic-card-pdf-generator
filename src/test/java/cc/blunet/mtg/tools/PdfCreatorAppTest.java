@@ -1,5 +1,7 @@
 package cc.blunet.mtg.tools;
 
+import static cc.blunet.mtg.db.Repository.defaultFilters;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -13,7 +15,8 @@ import cc.blunet.mtg.core.PrintedDeck;
 import cc.blunet.mtg.db.Repository;
 
 public class PdfCreatorAppTest {
-  private static final AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(new Repository()));
+  private static final AdvDeckFactory deckFactory =
+      new AdvDeckFactory(new DeckFactory(new Repository(defaultFilters())));
 
   public static void main(String[] args) throws URISyntaxException, IOException {
     // given

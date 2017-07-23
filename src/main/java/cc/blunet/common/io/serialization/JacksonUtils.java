@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import com.fasterxml.jackson.module.mrbean.MrBeanModule;
 
 import cc.blunet.common.Unchecked;
@@ -46,6 +47,8 @@ public final class JacksonUtils {
     try (InputStream is = Channels.newInputStream(Files.newByteChannel(file))) {
       Reader reader = reader(file, is);
 
+      // add dynamic bytecode generation for standard Jackson POJO de-/serializers
+      mapper.registerModule(new AfterburnerModule());
       // support abstract type materialization
       mapper.registerModule(new MrBeanModule());
 

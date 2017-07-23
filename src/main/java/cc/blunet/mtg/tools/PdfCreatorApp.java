@@ -1,18 +1,16 @@
 package cc.blunet.mtg.tools;
 
-import static cc.blunet.common.util.Paths2.fileName;
-import static java.util.stream.Collectors.toList;
+import static cc.blunet.mtg.db.Repository.defaultFilters;
 
 import java.io.IOException;
-import java.nio.file.Files;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +22,6 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -47,36 +44,31 @@ public class PdfCreatorApp {
 
   // TODO support commandline args?
   // create pdf for tokens/emblems: create a decklist!
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, URISyntaxException {
     // where to find a list of existing cards
-    Optional<Path> collectionPath = Optional.empty();
+    Path collectionPath = root.resolve("_collection");
     // where to search for deck lists
     Path deckPath = root.resolve("_decks");
+    // Path deckPath = Paths2.of(PdfCreatorApp.class, "/decks/");
     // where to read the images
     Path imagesPath = root.resolve("_all");
     // where to write the resulting pdf
-    Path resultPath = deckPath.resolve("various" + ".pdf");
-    // Predicate<String> deckSelector = n -> n.startsWith("C15");
+    Path resultPath = root.resolve("_pdfs/" + "output" + ".pdf");
 
     // run
-    AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(new Repository()));
+    AdvDeckFactory deckFactory = new AdvDeckFactory(new DeckFactory(new Repository(defaultFilters())));
 
-    Optional<PrintedDeck> collection = collectionPath.map(deckFactory::createFrom) //
-        .map(Iterables::getOnlyElement);
+    Predicate<String> collectionFileFilter = n -> true /* your filter */;
+    Predicate<String> deckFileFilter = n -> true /* your filter */;
 
-    Predicate<String> fileFilter = n -> (n.endsWith(".txt") || n.endsWith(".md"));
-
-    Collection<PrintedDeck> decks = Files //
-        .find(deckPath, 99, (path, bfa) -> fileFilter.test(fileName(path))) //
-        .flatMap(p -> deckFactory.createFrom(p).stream()) //
-        .collect(toList());
-
+    Set<PrintedDeck> collection = deckFactory.readAll(collectionPath, collectionFileFilter);
+    Set<PrintedDeck> decks = deckFactory.readAll(deckPath, deckFileFilter);
     new PdfCreatorApp().createPdf(decks, collection, imagesPath, resultPath);
   }
 
   private static final float POINTS_PER_MM = 2.834646F;
 
-  public void createPdf(Collection<PrintedDeck> decks, Optional<PrintedDeck> collection, Path imagesPath, Path resultPath) {
+  public void createPdf(Set<PrintedDeck> decks, Set<PrintedDeck> collection, Path imagesPath, Path resultPath) {
     List<Float> x = ImmutableList.of(11.0f, 74.0f, 137.0f);
     List<Float> y = ImmutableList.of(16.0f, 104.0f, 192.0f).reverse();
 
@@ -145,13 +137,13 @@ public class PdfCreatorApp {
   }
 
   // paged list of cards to be printed from given decks, minus those already in given collection
-  private List<Multimap<PrintedDeck, PrintedCard>> paged(Collection<PrintedDeck> decks, Optional<PrintedDeck> collection) {
+  private List<Multimap<PrintedDeck, PrintedCard>> paged(Set<PrintedDeck> decks, Set<PrintedDeck> collection) {
     List<Multimap<PrintedDeck, PrintedCard>> result = new ArrayList<>();
     Multimap<PrintedDeck, PrintedCard> page = null;
     int counter = 0;
     for (PrintedDeck deck : decks) {
       for (PrintedCard card : deck.cards()) {
-        if (collection.isPresent() && collection.get().asDeck().cards().contains(card.card())) {
+        if (collection.stream().anyMatch(d -> d.cards().stream().anyMatch(c -> c.card().equals(card.card())))) {
           continue;
         }
         if (counter++ % 9 == 0) {
